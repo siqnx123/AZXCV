@@ -1,10 +1,19 @@
-const json = (data, status = 200) =>
-  new Response(JSON.stringify(data), {
-    status,
-    headers: { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store' }
-  });
+// ==========================================
+// SOST AI - Cloudflare Worker Backend
+// ==========================================
 
-// أدوات الأمان
+const json = (data, status = 200, extraHeaders = {}) => {
+  return new Response(JSON.stringify(data), {
+    status,
+    headers: {
+      'Content-Type': 'application/json; charset=utf-8',
+      'Cache-Control': 'no-store',
+      ...extraHeaders
+    }
+  });
+};
+
+// دالة مساعدة لإنشاء الهاش (PBKDF2)
 async function hashPassword(password, salt) {
   const enc = new TextEncoder();
   const keyMaterial = await crypto.subtle.importKey('raw', enc.encode(password), 'PBKDF2', false, ['deriveBits']);
@@ -20,169 +29,191 @@ async function sha256(text) {
   return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
 }
 
-function generateToken() {
-  return Array.from(crypto.getRandomValues(new Uint8Array(32))).map(b => b.toString(16).padStart(2, '0')).join('');
+function generateSalt() {
+  return Array.from(crypto.getRandomValues(new Uint8Array(16))).map(b => b.toString(16).padStart(2, '0')).join('');
 }
 
+// استخراج المستخدم من الكوكيز
 async function getSessionUser(request, env) {
   const cookieHeader = request.headers.get('Cookie') || '';
   const match = cookieHeader.match(/sost_session=([^;]+)/);
   if (!match) return null;
+  
   const tokenHash = await sha256(match[1]);
+  
   const { results } = await env.DB.prepare(
-    `SELECT u.* FROM users u JOIN user_sessions s ON u.id = s.user_id WHERE s.session_hash = ? AND s.expires_at > ?`
+    `SELECT u.* FROM users u 
+     JOIN user_sessions s ON u.id = s.user_id 
+     WHERE s.session_hash = ? AND s.expires_at > ?`
   ).bind(tokenHash, Date.now()).all();
+  
   return results.length ? results[0] : null;
 }
 
 export default {
-  async fetch(request, env) {
+  async fetch(request, env, ctx) {
     const url = new URL(request.url);
     const method = request.method;
-    
-    // CORS للسماح بالاتصال
-    if (method === 'OPTIONS') return new Response(null, { headers: { 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Headers': '*', 'Access-Control-Allow-Methods': '*' } });
 
-    // 1. فحص الصحة
-    if (url.pathname === '/api/health') return json({ ok: true, database: Boolean(env.DB) });
+    // --- 1. APIs ---
+    if (url.pathname.startsWith('/api/')) {
 
-    // 2. تسجيل حساب جديد
-    if (url.pathname === '/api/auth/register' && method === 'POST') {
-      const { username, password } = await request.json();
-      if (!username || !password || password.length < 4) return json({ ok: false, error: 'بيانات غير صالحة' }, 400);
+      // 1. فحص الصحة
+      if (url.pathname === '/api/health') {
+        return json({ ok: true, db: !!env.DB });
+      }
 
-      const check = await env.DB.prepare('SELECT id FROM users WHERE username = ?').bind(username).first();
-      if (check) return json({ ok: false, error: 'اسم المستخدم موجود مسبقاً' }, 400);
+      // 2. تسجيل حساب جديد
+      if (url.pathname === '/api/auth/register' && method === 'POST') {
+        const { username, password } = await request.json();
+        if (!username || !password || username.length < 3) return json({ ok: false, error: 'بيانات غير صالحة' }, 400);
 
-      const salt = generateToken().slice(0, 16);
-      const pwdHash = await hashPassword(password, salt);
-      const userId = crypto.randomUUID();
+        const existing = await env.DB.prepare('SELECT id FROM users WHERE username = ?').bind(username).first();
+        if (existing) return json({ ok: false, error: 'اسم المستخدم موجود بالفعل' }, 400);
 
-      await env.DB.prepare(
-        `INSERT INTO users (id, username, password_hash, role, status, subscription, msgs_today, last_msg_date) 
-         VALUES (?, ?, ?, 'user', 'active', 'free', 0, ?)`
-      ).bind(userId, username, pwdHash + ':' + salt, new Date().toISOString().split('T')[0]).run();
+        const salt = generateSalt();
+        const pwdHash = await hashPassword(password, salt);
+        
+        // دمج الملح مع الهاش
+        const finalHash = `${salt}:${pwdHash}`;
 
-      return json({ ok: true, message: 'تم إنشاء الحساب' });
-    }
+        await env.DB.prepare(
+          `INSERT INTO users (username, password_hash, role, status, created_at) VALUES (?, ?, 'user', 'active', ?)`
+        ).bind(username, finalHash, Date.now()).run();
 
-    // 3. تسجيل الدخول
-    if (url.pathname === '/api/auth/login' && method === 'POST') {
-      const { username, password } = await request.json();
-      const user = await env.DB.prepare('SELECT * FROM users WHERE username = ?').bind(username).first();
-      
-      if (!user) return json({ ok: false, error: 'بيانات خاطئة' }, 401);
-      if (user.banned && (user.ban_until > Date.now() || user.ban_until === 0)) return json({ ok: false, error: 'محظور', reason: user.ban_reason }, 403);
+        return json({ ok: true, message: 'تم إنشاء الحساب بنجاح' });
+      }
 
-      const [hash, salt] = user.password_hash.split(':');
-      const checkHash = await hashPassword(password, salt);
-      if (checkHash !== hash) return json({ ok: false, error: 'بيانات خاطئة' }, 401);
+      // 3. تسجيل الدخول
+      if (url.pathname === '/api/auth/login' && method === 'POST') {
+        const { username, password } = await request.json();
+        
+        const user = await env.DB.prepare('SELECT * FROM users WHERE username = ?').bind(username).first();
+        if (!user) return json({ ok: false, error: 'بيانات الدخول غير صحيحة' }, 401);
+        
+        if (user.status === 'banned') {
+          return json({ ok: false, error: 'هذا الحساب محظور' }, 403);
+        }
 
-      const rawToken = generateToken();
-      const tokenHash = await sha256(rawToken);
-      const expiresAt = Date.now() + (30 * 24 * 60 * 60 * 1000); // 30 يوم
+        const [salt, oldHash] = (user.password_hash || '').split(':');
+        const verifyHash = await hashPassword(password, salt);
+        
+        if (verifyHash !== oldHash) return json({ ok: false, error: 'بيانات الدخول غير صحيحة' }, 401);
 
-      await env.DB.prepare('INSERT INTO user_sessions (id, user_id, session_hash, expires_at) VALUES (?, ?, ?, ?)')
-        .bind(crypto.randomUUID(), user.id, tokenHash, expiresAt).run();
+        // إنشاء جلسة جديدة
+        const rawToken = crypto.randomUUID() + crypto.randomUUID();
+        const sessionHash = await sha256(rawToken);
+        const expiresAt = Date.now() + (30 * 24 * 60 * 60 * 1000); // 30 يوم
 
-      const headers = new Headers();
-      headers.append('Set-Cookie', `sost_session=${rawToken}; HttpOnly; Secure; SameSite=Lax; Path=/; Max-Age=2592000`);
-      headers.append('Content-Type', 'application/json');
-      
-      return new Response(JSON.stringify({ ok: true, user: { username: user.username, role: user.role, subscription: user.subscription } }), { headers });
-    }
+        await env.DB.prepare(
+          `INSERT INTO user_sessions (user_id, session_hash, expires_at, created_at) VALUES (?, ?, ?, ?)`
+        ).bind(user.id, sessionHash, expiresAt, Date.now()).run();
 
-    // 4. حالة المستخدم
-    if (url.pathname === '/api/auth/me' && method === 'GET') {
+        const cookie = `sost_session=${rawToken}; HttpOnly; Secure; SameSite=Lax; Path=/; Max-Age=2592000`;
+        
+        return json({ ok: true, message: 'تم الدخول' }, 200, { 'Set-Cookie': cookie });
+      }
+
+      // 4. تسجيل الخروج
+      if (url.pathname === '/api/auth/logout' && method === 'POST') {
+        const cookieHeader = request.headers.get('Cookie') || '';
+        const match = cookieHeader.match(/sost_session=([^;]+)/);
+        if (match) {
+          const sessionHash = await sha256(match[1]);
+          await env.DB.prepare('DELETE FROM user_sessions WHERE session_hash = ?').bind(sessionHash).run();
+        }
+        return json({ ok: true }, 200, { 'Set-Cookie': 'sost_session=; HttpOnly; Secure; SameSite=Lax; Path=/; Max-Age=0' });
+      }
+
+      // 5. جلب بيانات المستخدم الحالي
+      if (url.pathname === '/api/auth/me' && method === 'GET') {
+        const user = await getSessionUser(request, env);
+        if (!user) return json({ ok: false, error: 'غير مصرح' }, 401);
+        return json({ ok: true, user: { id: user.id, username: user.username, role: user.role, status: user.status } });
+      }
+
+      // --- جميع المسارات التالية تتطلب تسجيل الدخول ---
       const user = await getSessionUser(request, env);
-      if (!user) return json({ ok: false, error: 'غير مصرح' }, 401);
-      return json({ ok: true, user: { username: user.username, role: user.role, subscription: user.subscription, msgs_today: user.msgs_today, banned: user.banned } });
-    }
+      if (!user) return json({ ok: false, error: 'يجب تسجيل الدخول أولاً' }, 401);
 
-    // 5. جلب المحادثات
-    if (url.pathname === '/api/chats' && method === 'GET') {
-      const user = await getSessionUser(request, env);
-      if (!user) return json({ ok: false, error: 'غير مصرح' }, 401);
-      const { results } = await env.DB.prepare('SELECT * FROM conversations WHERE user_id = ? ORDER BY updated_at DESC').bind(user.id).all();
-      return json({ ok: true, chats: results });
-    }
+      // 6. جلب المحادثات
+      if (url.pathname === '/api/chats' && method === 'GET') {
+        const { results } = await env.DB.prepare('SELECT id, title FROM conversations WHERE user_id = ? ORDER BY created_at DESC').bind(user.id).all();
+        return json({ ok: true, chats: results });
+      }
 
-    // 6. حفظ محادثة جديدة
-    if (url.pathname === '/api/chats' && method === 'POST') {
-      const user = await getSessionUser(request, env);
-      if (!user) return json({ ok: false, error: 'غير مصرح' }, 401);
-      
-      if (user.banned && (user.ban_until > Date.now() || user.ban_until === 0)) return json({ ok: false, error: 'محظور' }, 403);
-      
-      // التحقق من الحدود
-      const today = new Date().toISOString().split('T')[0];
-      let msgsToday = user.msgs_today || 0;
-      if (user.last_msg_date !== today) msgsToday = 0;
+      // 7. جلب رسائل محادثة معينة
+      if (url.pathname.startsWith('/api/chats/') && url.pathname.endsWith('/messages') && method === 'GET') {
+        const chatId = url.pathname.split('/')[3];
+        const chatOwner = await env.DB.prepare('SELECT id FROM conversations WHERE id = ? AND user_id = ?').bind(chatId, user.id).first();
+        
+        if (!chatOwner) return json({ ok: false, error: 'غير مصرح' }, 403);
 
-      if (user.subscription === 'free' && msgsToday >= 10) return json({ ok: false, error: 'وصلت للحد الأقصى' }, 429);
-
-      const { title } = await request.json();
-      const chatId = crypto.randomUUID();
-      
-      await env.DB.prepare('INSERT INTO conversations (id, user_id, title, updated_at) VALUES (?, ?, ?, ?)')
-        .bind(chatId, user.id, title || 'محادثة جديدة', Date.now()).run();
-
-      return json({ ok: true, id: chatId });
-    }
-
-    // 7. الرسائل (جلب وإرسال)
-    if (url.pathname.startsWith('/api/chats/') && url.pathname.endsWith('/messages')) {
-      const user = await getSessionUser(request, env);
-      if (!user) return json({ ok: false, error: 'غير مصرح' }, 401);
-      
-      const chatId = url.pathname.split('/')[3];
-      
-      // التحقق من الملكية
-      const chat = await env.DB.prepare('SELECT * FROM conversations WHERE id = ? AND user_id = ?').bind(chatId, user.id).first();
-      if (!chat) return json({ ok: false, error: 'غير موجود' }, 404);
-
-      if (method === 'GET') {
-        const { results } = await env.DB.prepare('SELECT * FROM messages WHERE conversation_id = ? ORDER BY created_at ASC').bind(chatId).all();
+        const { results } = await env.DB.prepare('SELECT role, content FROM messages WHERE conversation_id = ? ORDER BY created_at ASC').bind(chatId).all();
         return json({ ok: true, messages: results });
       }
 
-      if (method === 'POST') {
-        const { role, content } = await request.json();
-        if (role === 'user') {
-           const today = new Date().toISOString().split('T')[0];
-           let msgsToday = (user.last_msg_date === today) ? user.msgs_today : 0;
-           msgsToday++;
-           await env.DB.prepare('UPDATE users SET msgs_today = ?, last_msg_date = ?, total_msgs = total_msgs + 1 WHERE id = ?').bind(msgsToday, today, user.id).run();
+      // 8. إرسال رسالة والذكاء الاصطناعي (التحقق من الحدود هنا)
+      if (url.pathname === '/api/chat' && method === 'POST') {
+        const { conversationId, message } = await request.json();
+        
+        // التحقق من حدود الاشتراك (كمثال: 10 رسائل للمجاني)
+        const sub = await env.DB.prepare('SELECT * FROM subscriptions WHERE user_id = ? AND status = "active" AND expires_at > ?').bind(user.id, Date.now()).first();
+        let isPremium = !!sub;
+        
+        if (!isPremium) {
+           const msgCount = await env.DB.prepare('SELECT COUNT(*) as c FROM messages m JOIN conversations c ON m.conversation_id = c.id WHERE c.user_id = ? AND m.role = "user"').bind(user.id).first();
+           if (msgCount.c >= 10) {
+             return json({ ok: false, error: 'وصلت للحد الأقصى للرسائل المجانية' }, 403);
+           }
         }
 
-        await env.DB.prepare('INSERT INTO messages (id, conversation_id, role, content) VALUES (?, ?, ?, ?)')
-          .bind(crypto.randomUUID(), chatId, role, content).run();
+        // حفظ المحادثة إذا كانت جديدة
+        let chat = await env.DB.prepare('SELECT id FROM conversations WHERE id = ? AND user_id = ?').bind(conversationId, user.id).first();
+        if (!chat) {
+          await env.DB.prepare('INSERT INTO conversations (id, user_id, title, created_at) VALUES (?, ?, ?, ?)').bind(conversationId, user.id, message.slice(0, 30), Date.now()).run();
+        }
+
+        // حفظ رسالة المستخدم
+        await env.DB.prepare('INSERT INTO messages (conversation_id, role, content, created_at) VALUES (?, "user", ?, ?)').bind(conversationId, message, Date.now()).run();
+
+        // جلب سياق المحادثة السابقة
+        const { results: history } = await env.DB.prepare('SELECT role, content FROM messages WHERE conversation_id = ? ORDER BY created_at ASC LIMIT 10').bind(conversationId).all();
         
-        await env.DB.prepare('UPDATE conversations SET updated_at = ? WHERE id = ?').bind(Date.now(), chatId).run();
-        return json({ ok: true });
+        let messages = history.map(m => ({ role: m.role, content: m.content }));
+
+        // الاتصال بموديل الذكاء الاصطناعي (Pollinations AI كمثال مجاني)
+        let reply = '';
+        try {
+            const aiRes = await fetch('https://text.pollinations.ai/', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    messages: [
+                        { role: 'system', content: 'أنت SOST AI، مساعد ذكي ومطور. أجب باللغة العربية بأسلوب واضح ومفيد.' },
+                        ...messages
+                    ],
+                    model: 'openai'
+                })
+            });
+            reply = await aiRes.text();
+        } catch (e) {
+            reply = "عذراً، حدث خطأ في الاتصال بمحرك الذكاء الاصطناعي.";
+        }
+
+        // حفظ رد الذكاء الاصطناعي
+        await env.DB.prepare('INSERT INTO messages (conversation_id, role, content, created_at) VALUES (?, "assistant", ?, ?)').bind(conversationId, reply, Date.now()).run();
+
+        return json({ ok: true, reply });
       }
+
+      return json({ ok: false, error: 'API Route Not Found' }, 404);
     }
 
-    // 8. الإدارة (للمشرف فقط)
-    if (url.pathname.startsWith('/api/admin')) {
-      const user = await getSessionUser(request, env);
-      if (!user || user.role !== 'admin') return json({ ok: false, error: 'غير مصرح' }, 403);
-
-      if (url.pathname === '/api/admin/users' && method === 'GET') {
-        const { results } = await env.DB.prepare('SELECT id, username, subscription, total_msgs, banned FROM users').all();
-        return json({ ok: true, users: results });
-      }
-      // يمكنك إضافة المزيد من مسارات الإدارة هنا
+    // --- 2. الأصول الثابتة (HTML, CSS, JS) ---
+    if (env.ASSETS) {
+      return env.ASSETS.fetch(request);
     }
-
-    // 9. تمرير الذكاء الاصطناعي (الاحتفاظ بالكود الأصلي)
-    if (url.pathname === '/api/chat' && method === 'POST') {
-       // يمكنك هنا وضع كود الـ AI السابق أو تمريره
-       return json({ ok: false, error: 'يجب ربط خدمة الذكاء الاصطناعي هنا' }, 501);
-    }
-
-    // 10. الملفات الثابتة
-    if (env.ASSETS) return env.ASSETS.fetch(request);
 
     return new Response('Not Found', { status: 404 });
   }
