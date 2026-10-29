@@ -1,4 +1,3 @@
-
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "azxcv",
@@ -6,7 +5,8 @@
   "compatibility_date": "2026-10-29",
   "assets": {
     "directory": ".",
-    "binding": "ASSETS"
+    "binding": "ASSETS",
+    "run_worker_first": ["/api/*"]
   },
   "d1_databases": [
     {
