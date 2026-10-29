@@ -1,0 +1,18 @@
+
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "azxcv",
+  "main": "worker.js",
+  "compatibility_date": "2026-10-29",
+  "assets": {
+    "directory": ".",
+    "binding": "ASSETS"
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "azxcv-db",
+      "database_id": "17dcfb59-3693-4ab8-b0e3-05904d79416c"
+    }
+  ]
+}
