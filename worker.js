@@ -5,7 +5,6 @@ const json = (data, status = 200, extraHeaders = {}) => {
   });
 };
 
-// تشفير كلمة المرور
 async function hashPassword(password, salt) {
   const enc = new TextEncoder();
   const keyMaterial = await crypto.subtle.importKey('raw', enc.encode(password), 'PBKDF2', false, ['deriveBits']);
@@ -25,7 +24,6 @@ function generateSalt() {
   return Array.from(crypto.getRandomValues(new Uint8Array(16))).map(b => b.toString(16).padStart(2, '0')).join('');
 }
 
-// التحقق من الجلسة
 async function getSessionUser(request, env) {
   const cookieHeader = request.headers.get('Cookie') || '';
   const match = cookieHeader.match(/sost_session=([^;]+)/);
@@ -54,7 +52,7 @@ export default {
     if (url.pathname.startsWith('/api/')) {
       if (!env.DB) return json({ ok: false, error: "Database missing" }, 500);
 
-      // 1. إنشاء حساب
+      // Register
       if (url.pathname === '/api/auth/register' && method === 'POST') {
         const { username, password } = await request.json();
         if (!username || !password) return json({ ok: false, error: 'بيانات ناقصة' }, 400);
@@ -69,7 +67,7 @@ export default {
         return json({ ok: true, message: 'تم إنشاء الحساب' });
       }
 
-      // 2. تسجيل الدخول
+      // Login
       if (url.pathname === '/api/auth/login' && method === 'POST') {
         const { username, password } = await request.json();
         const user = await env.DB.prepare('SELECT * FROM users WHERE username = ?').bind(username).first();
@@ -90,7 +88,7 @@ export default {
         return json({ ok: true }, 200, { 'Set-Cookie': cookie });
       }
 
-      // 3. تسجيل الخروج
+      // Logout
       if (url.pathname === '/api/auth/logout' && method === 'POST') {
         const cookieHeader = request.headers.get('Cookie') || '';
         const match = cookieHeader.match(/sost_session=([^;]+)/);
@@ -101,24 +99,23 @@ export default {
         return json({ ok: true }, 200, { 'Set-Cookie': 'sost_session=; HttpOnly; Secure; SameSite=Lax; Path=/; Max-Age=0' });
       }
 
-      // 4. جلب بيانات المستخدم الحالي
+      // Me
       if (url.pathname === '/api/auth/me' && method === 'GET') {
         const user = await getSessionUser(request, env);
         if (!user) return json({ ok: false }, 401);
         return json({ ok: true, user: { id: user.id, username: user.username, role: user.role, status: user.status } });
       }
 
-      // --- المسارات التالية تتطلب تسجيل دخول ---
       const user = await getSessionUser(request, env);
       if (!user) return json({ ok: false, error: 'يجب تسجيل الدخول' }, 401);
 
-      // جلب المحادثات
+      // Get Chats
       if (url.pathname === '/api/chats' && method === 'GET') {
         const { results } = await env.DB.prepare('SELECT id, title FROM conversations WHERE user_id = ? ORDER BY created_at DESC').bind(user.id).all();
         return json({ ok: true, chats: results });
       }
 
-      // جلب الرسائل
+      // Get Messages
       if (url.pathname.startsWith('/api/chats/') && url.pathname.endsWith('/messages') && method === 'GET') {
         const chatId = url.pathname.split('/')[3];
         const chatOwner = await env.DB.prepare('SELECT id FROM conversations WHERE id = ? AND user_id = ?').bind(chatId, user.id).first();
@@ -127,7 +124,7 @@ export default {
         return json({ ok: true, messages: results });
       }
 
-      // إرسال رسالة والذكاء الاصطناعي
+      // Chat with AI
       if (url.pathname === '/api/chat' && method === 'POST') {
         const { conversationId, message } = await request.json();
         
@@ -139,13 +136,13 @@ export default {
 
         let reply = '';
         try {
-          // استخدام Pollinations ولكن من خلال الخادم لحماية الـ IP
+          // استخدام Pollinations API من الخادم لتجنب مشاكل الحد الأقصى للـ IP
           const aiRes = await fetch('https://text.pollinations.ai/', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
               messages: [
-                { role: 'system', content: 'أنت SOST AI، مساعد ذكي. أجب باللغة العربية.' },
+                { role: 'system', content: 'أنت SOST AI، مساعد ذكي ومطور. أجب باللغة العربية بأسلوب واضح ومفيد.' },
                 { role: 'user', content: message }
               ],
               model: 'openai'
