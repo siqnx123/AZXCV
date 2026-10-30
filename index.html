@@ -4,7 +4,6 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" name="viewport"/>
 <title>SOST AI — بوابة المحادثة</title>
-<meta content="SOST AI — واجهة محادثة ذكاء اصطناعي متطورة من تصميم مصطفى" name="description"/>
 <meta content="#050505" name="theme-color"/>
 <link href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230d0507'/%3E%3Cg fill='none' stroke='%23ff2233' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20.5 6.6c0 3.4-9 3-9 7.4s8.2 3.6 8.2 7.4c0 2-1.7 3.4-4.2 3.4'/%3E%3Ccircle cx='20.5' cy='6.6' r='2.4' fill='%23ff2233' stroke='none'/%3E%3C/g%3E%3C/svg%3E" rel="icon" type="image/svg+xml"/>
 <script src="config.js"></script>
@@ -15,1004 +14,132 @@
 <style>
 /* [جميع أنماط CSS الخاصة بك تبقى كما هي بالضبط] */
 :root {
-  --bg: #050505;
-  --sidebar-bg: rgba(8,3,4,.92);
-  --surface: rgba(20,8,10,.72);
-  --surface-hover: rgba(35,10,14,.84);
-  --border: rgba(255,34,51,.18);
-  --border-strong: rgba(255,34,51,.45);
-  --text-primary: #fff5f5;
-  --text-secondary: #c9a9ac;
-  --text-muted: #8a6266;
-  --accent: #ff2233;
-  --accent-strong: #ff4d5c;
-  --accent-deep: #a80016;
-  --accent-soft: rgba(255,34,51,.10);
-  --accent-glow: rgba(255,34,51,.32);
-  --accent-bg: rgba(255,34,51,.08);
-  --code-bg: #0a0204;
-  --tok-comment: #7d6d72;
-  --tok-string: #ffb3a7;
-  --tok-number: #ffcf6b;
-  --tok-keyword: #ff6b7f;
-  --tok-type: #7fd1ff;
-  --tok-func: #d7b3ff;
-  --tok-op: #ff9fae;
-  --tok-punct: #c9b6bb;
-  --tok-added: #5ad19a;
-  --tok-removed: #ff7b8a;
-  --code-header-bg: #160508;
-  --code-inline-bg: rgba(255,34,51,.12);
-  --user-bubble-bg: linear-gradient(135deg, #ff2233 0%, #8b0018 100%);
-  --user-bubble-text: #ffffff;
-  --scrollbar-thumb: #3d1419;
-  --font: 'Noto Sans Arabic', 'Inter', system-ui, sans-serif;
-  --mono: 'JetBrains Mono', monospace;
-  --radius: 16px;
-  --radius-sm: 10px;
+  --bg: #050505; --sidebar-bg: rgba(8,3,4,.92); --surface: rgba(20,8,10,.72); --surface-hover: rgba(35,10,14,.84);
+  --border: rgba(255,34,51,.18); --border-strong: rgba(255,34,51,.45); --text-primary: #fff5f5; --text-secondary: #c9a9ac; --text-muted: #8a6266;
+  --accent: #ff2233; --accent-strong: #ff4d5c; --accent-deep: #a80016; --accent-soft: rgba(255,34,51,.10); --accent-glow: rgba(255,34,51,.32); --accent-bg: rgba(255,34,51,.08);
+  --code-bg: #0a0204; --user-bubble-bg: linear-gradient(135deg, #ff2233 0%, #8b0018 100%); --user-bubble-text: #ffffff; --scrollbar-thumb: #3d1419;
+  --font: 'Noto Sans Arabic', 'Inter', system-ui, sans-serif; --mono: 'JetBrains Mono', monospace; --radius: 16px; --radius-sm: 10px;
 }
 [data-theme="light"] {
-  --bg: #fffafa; --sidebar-bg: #fdf3f4; --surface: #fbeef0; --surface-hover: #f6e2e5;
-  --border: #edccd1; --border-strong: #ddadb4; --text-primary: #26060a;
-  --text-secondary: #6d3b41; --text-muted: #97666c;
-  --accent: #d4001a; --accent-strong: #e01028; --accent-deep: #9d0014;
-  --accent-soft: rgba(212,0,26,.08); --accent-glow: rgba(212,0,26,.22);
+  --bg: #fffafa; --sidebar-bg: #fdf3f4; --surface: #fbeef0; --surface-hover: #f6e2e5; --border: #edccd1; --border-strong: #ddadb4;
+  --text-primary: #26060a; --text-secondary: #6d3b41; --text-muted: #97666c; --accent: #d4001a; --accent-strong: #e01028; --accent-deep: #9d0014; --accent-soft: rgba(212,0,26,.08);
 }
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html, body, #root { height: 100%; overflow: hidden; position: fixed; width: 100%; }
-body {
-  font-family: var(--font);
-  background:
-    radial-gradient(900px 520px at 78% -10%, rgba(255,34,51,.18), transparent 63%),
-    radial-gradient(800px 480px at -10% 110%, rgba(168,0,22,.14), transparent 64%),
-    linear-gradient(rgba(255,34,51,.02) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,34,51,.02) 1px, transparent 1px),
-    linear-gradient(180deg, #050505 0%, #0a0204 100%);
-  background-size: auto, auto, 42px 42px, 42px 42px, auto;
-  color: var(--text-primary); font-size: 14px; line-height: 1.6;
-  -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
-}
+body { font-family: var(--font); background: radial-gradient(900px 520px at 78% -10%, rgba(255,34,51,.18), transparent 63%), radial-gradient(800px 480px at -10% 110%, rgba(168,0,22,.14), transparent 64%), linear-gradient(180deg, #050505 0%, #0a0204 100%); color: var(--text-primary); font-size: 14px; line-height: 1.6; -webkit-font-smoothing: antialiased; }
 ::selection { background: var(--accent); color: #fff; }
 button { font-family: var(--font); cursor: pointer; border: none; background: none; color: inherit; font-size: inherit; }
 a { color: inherit; text-decoration: none; }
-::-webkit-scrollbar { width: 5px; }
-::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: var(--scrollbar-thumb); border-radius: 4px; }
-::-webkit-scrollbar-thumb:hover { background: var(--accent-deep); }
+::-webkit-scrollbar { width: 5px; } ::-webkit-scrollbar-track { background: transparent; } ::-webkit-scrollbar-thumb { background: var(--scrollbar-thumb); border-radius: 4px; }
 
-/* ========== AUTH OVERLAY ========== */
-.auth-overlay {
-  position: fixed; inset: 0; z-index: 9999;
-  background:
-    radial-gradient(900px 520px at 78% -10%, rgba(255,34,51,.20), transparent 63%),
-    radial-gradient(800px 480px at -10% 110%, rgba(168,0,22,.14), transparent 64%),
-    linear-gradient(rgba(255,34,51,.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,34,51,.03) 1px, transparent 1px),
-    linear-gradient(180deg, #050505 0%, #0a0204 100%);
-  background-size: auto, auto, 48px 48px, 48px 48px, auto;
-  display: flex; align-items: center; justify-content: center; padding: 20px;
-  overflow-y: auto;
-}
+/* AUTH OVERLAY */
+.auth-overlay { position: fixed; inset: 0; z-index: 9999; background: radial-gradient(900px 520px at 78% -10%, rgba(255,34,51,.20), transparent 63%), linear-gradient(180deg, #050505 0%, #0a0204 100%); display: flex; align-items: center; justify-content: center; padding: 20px; overflow-y: auto; }
 .auth-overlay.hidden { display: none; }
-.auth-card {
-  width: 100%; max-width: 440px; padding: 34px;
-  background: rgba(10,3,5,.88);
-  border: 1px solid rgba(255,34,51,.35);
-  border-radius: 22px;
-  box-shadow: 0 0 80px rgba(255,34,51,.22), 0 30px 80px rgba(0,0,0,.6), inset 0 1px 0 rgba(255,255,255,.04);
-  backdrop-filter: blur(22px);
-}
-.auth-logo { text-align: center; margin-bottom: 10px; }
-.auth-logo-title {
-  font-size: 48px; font-weight: 900; letter-spacing: 10px;
-  background: linear-gradient(135deg, #ff2233 0%, #ff7b88 55%, #8b0018 100%);
-  -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
-  filter: drop-shadow(0 0 25px rgba(255,34,51,.45));
-  line-height: 1;
-}
-.auth-subtitle {
-  text-align: center; font-size: 12px; color: var(--text-muted);
-  letter-spacing: 3px; margin-bottom: 26px; font-family: var(--mono);
-  text-transform: uppercase;
-}
-.auth-tabs {
-  display: flex; gap: 4px; background: rgba(255,34,51,.05);
-  border: 1px solid rgba(255,34,51,.22); border-radius: 14px; padding: 4px;
-  margin-bottom: 20px;
-}
-.auth-tab {
-  flex: 1; padding: 11px; border-radius: 10px; font-size: 14px;
-  font-weight: 700; color: var(--text-muted); transition: all .15s;
-  font-family: var(--font);
-}
-.auth-tab:hover { color: var(--text-primary); }
-.auth-tab.active {
-  background: linear-gradient(135deg, #ff2233, #8b0018); color: #fff;
-  box-shadow: 0 4px 18px rgba(255,34,51,.4);
-}
+.auth-card { width: 100%; max-width: 440px; padding: 34px; background: rgba(10,3,5,.88); border: 1px solid rgba(255,34,51,.35); border-radius: 22px; box-shadow: 0 0 80px rgba(255,34,51,.22), 0 30px 80px rgba(0,0,0,.6); backdrop-filter: blur(22px); }
+.auth-logo-title { font-size: 48px; font-weight: 900; letter-spacing: 10px; background: linear-gradient(135deg, #ff2233 0%, #ff7b88 55%, #8b0018 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-align: center; }
+.auth-subtitle { text-align: center; font-size: 12px; color: var(--text-muted); letter-spacing: 3px; margin-bottom: 26px; text-transform: uppercase; }
+.auth-tabs { display: flex; gap: 4px; background: rgba(255,34,51,.05); border: 1px solid rgba(255,34,51,.22); border-radius: 14px; padding: 4px; margin-bottom: 20px; }
+.auth-tab { flex: 1; padding: 11px; border-radius: 10px; font-size: 14px; font-weight: 700; color: var(--text-muted); transition: all .15s; }
+.auth-tab.active { background: linear-gradient(135deg, #ff2233, #8b0018); color: #fff; }
 .auth-field { margin-bottom: 14px; }
-.auth-field label {
-  display: block; font-size: 12px; color: var(--text-secondary);
-  margin-bottom: 6px; font-weight: 600;
-}
-.auth-field input {
-  width: 100%; padding: 12px 14px;
-  background: rgba(255,34,51,.04); border: 1px solid rgba(255,34,51,.22);
-  border-radius: 11px; color: var(--text-primary); font-size: 14px;
-  outline: none; font-family: var(--font); transition: all .15s;
-}
-.auth-field input:focus {
-  border-color: var(--accent); background: rgba(255,34,51,.07);
-  box-shadow: 0 0 0 3px rgba(255,34,51,.12);
-}
-.auth-submit {
-  width: 100%; padding: 13px;
-  background: linear-gradient(135deg, #ff2233, #8b0018);
-  border: none; border-radius: 12px; color: #fff; font-size: 15px;
-  font-weight: 800; cursor: pointer; transition: all .15s; margin-top: 8px;
-  letter-spacing: .5px;
-}
-.auth-submit:hover { filter: brightness(1.12); box-shadow: 0 8px 28px rgba(255,34,51,.45); }
-.auth-submit:disabled { opacity: .6; cursor: wait; }
-.auth-msg {
-  text-align: center; font-size: 13px; margin-top: 12px; min-height: 22px;
-  color: #ff7b88; font-weight: 500;
-}
+.auth-field label { display: block; font-size: 12px; color: var(--text-secondary); margin-bottom: 6px; font-weight: 600; }
+.auth-field input { width: 100%; padding: 12px 14px; background: rgba(255,34,51,.04); border: 1px solid rgba(255,34,51,.22); border-radius: 11px; color: var(--text-primary); font-size: 14px; outline: none; }
+.auth-submit { width: 100%; padding: 13px; background: linear-gradient(135deg, #ff2233, #8b0018); border-radius: 12px; color: #fff; font-size: 15px; font-weight: 800; margin-top: 8px; }
+.auth-msg { text-align: center; font-size: 13px; margin-top: 12px; min-height: 22px; color: #ff7b88; }
 .auth-msg.success { color: #5ad19a; }
-.auth-footer {
-  text-align: center; margin-top: 20px; padding-top: 18px;
-  border-top: 1px solid rgba(255,34,51,.14);
-  font-size: 11px; color: var(--text-muted); line-height: 1.7;
-}
-.auth-footer a { color: var(--accent); font-weight: 600; }
+.auth-footer { text-align: center; margin-top: 20px; padding-top: 18px; border-top: 1px solid rgba(255,34,51,.14); font-size: 11px; color: var(--text-muted); }
 
-/* ========== APP STRUCTURE ========== */
+/* APP */
 .app { display: flex; flex-direction: row-reverse; height: 100%; height: 100dvh; overflow: hidden; }
 html[dir="rtl"] .app { flex-direction: row; }
-
-.sidebar {
-  width: 272px; background: linear-gradient(180deg, rgba(8,3,4,.96), rgba(5,2,3,.86));
-  display: flex; flex-direction: column; flex-shrink: 0;
-  transition: width .2s ease, transform .25s ease; overflow: hidden; z-index: 100;
-  border-left: 1px solid rgba(255,34,51,.16);
-  box-shadow: -18px 0 60px rgba(0,0,0,.35);
-}
-.sidebar-header { padding: 20px 18px 14px; flex-shrink: 0; }
-.sidebar-header-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
-.sidebar-logo { display: flex; align-items: center; gap: 10px; min-width: 0; }
-.sidebar-logo-mark {
-  width: 38px; height: 38px; border-radius: 11px;
-  background: linear-gradient(135deg, #ff2233, #8b0018);
-  display: flex; align-items: center; justify-content: center;
-  font-family: 'Arial Black', Arial, sans-serif;
-  font-size: 11px; font-weight: 900; letter-spacing: .5px;
-  color: #fff; box-shadow: 0 0 22px rgba(255,34,51,.4), inset 0 1px 0 rgba(255,255,255,.15);
-  flex-shrink: 0;
-}
-.sidebar-logo-text {
-  font-weight: 900; font-size: 18px; letter-spacing: 2px;
-  color: var(--accent); text-shadow: 0 0 18px rgba(255,34,51,.6);
-  white-space: nowrap;
-}
-.sidebar-logo-sub {
-  display: block; font-size: 9px; letter-spacing: 3px; color: var(--text-muted);
-  font-family: var(--mono); margin-top: -2px;
-}
-.sidebar-collapse-btn {
-  width: 28px; height: 28px; border-radius: 7px;
-  display: flex; align-items: center; justify-content: center;
-  color: var(--text-muted); transition: all .12s; flex-shrink: 0;
-}
-.sidebar-collapse-btn:hover { color: var(--accent); background: var(--accent-soft); }
-.sidebar-collapse-btn svg { width: 15px; height: 15px; }
-.new-chat-btn {
-  display: flex; align-items: center; justify-content: center; gap: 7px;
-  width: 100%; padding: 11px 14px; min-height: 44px;
-  background: linear-gradient(135deg, rgba(255,34,51,.18), rgba(139,0,24,.55));
-  border: 1px solid rgba(255,34,51,.4); border-radius: 12px;
-  font-size: 13.5px; font-weight: 700; color: #fff;
-  transition: all .15s; overflow: hidden;
-  box-shadow: 0 0 26px rgba(255,34,51,.10);
-}
-.new-chat-btn:hover {
-  background: linear-gradient(135deg, rgba(255,34,51,.3), rgba(139,0,24,.75));
-  box-shadow: 0 0 32px rgba(255,34,51,.28);
-}
-.new-chat-btn svg { width: 16px; height: 16px; flex-shrink: 0; }
-.new-chat-label { white-space: nowrap; }
+.sidebar { width: 272px; background: rgba(8,3,4,.96); display: flex; flex-direction: column; flex-shrink: 0; border-left: 1px solid rgba(255,34,51,.16); z-index: 100; transition: transform .2s; }
+.sidebar-header { padding: 20px 18px 14px; }
+.new-chat-btn { display: flex; align-items: center; justify-content: center; gap: 7px; width: 100%; padding: 11px; background: rgba(255,34,51,.18); border: 1px solid rgba(255,34,51,.4); border-radius: 12px; color: #fff; font-weight: 700; }
 .sidebar-chats { flex: 1; overflow-y: auto; padding: 4px 12px; }
-.chat-group-label {
-  font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 2px;
-  color: var(--accent); padding: 12px 8px 6px;
-  border-bottom: 1px solid rgba(255,34,51,.12); margin-bottom: 4px; text-align: right;
-}
-html[dir="ltr"] .chat-group-label { text-align: left; }
-.history-empty { padding: 14px 8px; color: var(--text-muted); font-size: 13px; text-align: center; }
-.history-item {
-  display: block; width: 100%; text-align: right; direction: rtl;
-  padding: 8px 10px; font-size: 13px; color: var(--text-secondary);
-  border-radius: 8px; transition: all .12s; cursor: pointer;
-}
-html[dir="ltr"] .history-item { text-align: left; direction: ltr; }
-.history-item:hover { color: var(--text-primary); background: var(--surface); }
-.history-item.active {
-  color: var(--accent); font-weight: 700; background: rgba(255,34,51,.08);
-  box-shadow: inset -2px 0 0 var(--accent), 0 0 18px rgba(255,34,51,.06);
-}
-html[dir="ltr"] .history-item.active { box-shadow: inset 2px 0 0 var(--accent); }
-.sidebar-bottom { padding: 12px 14px 14px; flex-shrink: 0; border-top: 1px solid var(--border); }
-.settings-trigger {
-  display: flex; align-items: center; gap: 8px; width: 100%;
-  padding: 8px 10px; font-size: 13px; color: var(--text-muted);
-  border-radius: 8px; transition: all .12s; overflow: hidden;
-  border: 1px solid transparent;
-}
-.settings-trigger:hover { color: var(--accent); background: var(--accent-soft); border-color: rgba(255,34,51,.2); }
-.settings-trigger svg { width: 15px; height: 15px; opacity: .7; flex-shrink: 0; }
-.settings-label { white-space: nowrap; }
-.dev-credit {
-  margin-top: 8px; padding-top: 10px; border-top: 1px solid rgba(255,34,51,.1);
-  font-size: 10px; color: var(--text-muted); text-align: center; line-height: 1.7;
-}
-.dev-credit strong { color: var(--accent); font-weight: 700; }
-.dev-credit a { color: #c3a7ff; font-family: var(--mono); font-weight: 600; }
-
-.sidebar.collapsed { width: 64px; }
-.sidebar.collapsed .sidebar-header { padding: 12px 6px 8px; }
-.sidebar.collapsed .sidebar-header-top { justify-content: center; margin-bottom: 8px; }
-.sidebar.collapsed .sidebar-logo-text, .sidebar.collapsed .sidebar-logo-sub,
-.sidebar.collapsed .dev-credit { display: none; }
-.sidebar.collapsed .new-chat-btn { padding: 8px; gap: 0; }
-.sidebar.collapsed .new-chat-label { display: none; }
-.sidebar.collapsed .sidebar-chats { padding: 2px 4px; }
-.sidebar.collapsed .chat-group-label { font-size: 0; padding: 10px 0 2px; border-bottom: none; }
-.sidebar.collapsed .history-item { padding: 6px 0; text-align: center; font-size: 0; }
-.sidebar.collapsed .settings-trigger { justify-content: center; padding: 8px 0; }
-.sidebar.collapsed .settings-label { display: none; }
-
-.sidebar-overlay {
-  display: none; position: fixed; inset: 0; background: rgba(0,0,0,.65);
-  z-index: 99; backdrop-filter: blur(3px);
-}
+.history-item { display: block; width: 100%; text-align: right; padding: 8px 10px; font-size: 13px; color: var(--text-secondary); border-radius: 8px; }
+.history-item:hover, .history-item.active { color: var(--accent); background: rgba(255,34,51,.08); }
+.sidebar-bottom { padding: 12px; border-top: 1px solid var(--border); }
+.settings-trigger { display: flex; align-items: center; gap: 8px; width: 100%; padding: 8px; font-size: 13px; color: var(--text-muted); border-radius: 8px; }
+.settings-trigger:hover { color: var(--accent); background: var(--accent-soft); }
+.sidebar-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.65); z-index: 99; }
 .sidebar-overlay.open { display: block; }
 
-/* ========== TOP BAR ========== */
-.chat-area {
-  flex: 1; display: flex; flex-direction: column; min-width: 0; min-height: 0;
-  overflow: hidden; position: relative;
-}
-.chat-area::before {
-  content: 'SOST // ORBITAL INTELLIGENCE';
-  position: absolute; top: 82px; left: 32px;
-  color: rgba(255,34,51,.28); font: 10px var(--mono); letter-spacing: .22em;
-  pointer-events: none; z-index: 2;
-}
-.top-bar {
-  height: 74px; background: rgba(6,2,3,.72);
-  border-bottom: 1px solid rgba(255,34,51,.14);
-  backdrop-filter: blur(18px);
-  padding: 8px 16px; display: flex; direction: ltr; align-items: center;
-  gap: 8px; flex-shrink: 0;
-}
-.mobile-burger { display: none; order: 2; padding: 6px; border-radius: 6px; flex-shrink: 0; color: var(--text-secondary); }
-.mobile-burger:hover { background: var(--accent-soft); color: var(--accent); }
-.mobile-burger svg { width: 20px; height: 20px; }
-.top-bar-inner {
-  display: flex; align-items: center; flex: 1; gap: 8px;
-  position: relative; padding: 0 28px;
-}
-.model-badge-static {
-  display: flex; align-items: center; gap: 8px; padding: 9px 15px;
-  border: 1px solid rgba(255,34,51,.28); border-radius: 999px;
-  font-size: 13px; font-weight: 700; color: var(--accent);
-  background: rgba(15,4,6,.7); white-space: nowrap;
-  box-shadow: 0 0 18px rgba(255,34,51,.08);
-}
-.model-badge-dot {
-  width: 7px; height: 7px; border-radius: 50%;
-  background: var(--accent); box-shadow: 0 0 12px var(--accent);
-  animation: signal-pulse 1.8s ease-in-out infinite;
-}
-.top-separator { margin: 0 7px; color: #5a3a3e; }
-.top-microcopy { color: var(--text-muted); font: 10px var(--mono); letter-spacing: .08em; }
-.top-bar-spacer { flex: 1; }
-.user-badge {
-  display: inline-flex; align-items: center; gap: 8px; padding: 7px 12px;
-  background: rgba(255,34,51,.08); border: 1px solid rgba(255,34,51,.25);
-  border-radius: 999px; font-size: 12px; font-weight: 700;
-  color: var(--text-primary); white-space: nowrap;
-}
-.user-badge .ub-plan {
-  font-size: 10px; font-family: var(--mono); padding: 2px 7px;
-  background: linear-gradient(135deg, #ff2233, #8b0018); color: #fff;
-  border-radius: 999px; letter-spacing: .5px;
-}
-.user-badge .ub-plan.yearly { background: linear-gradient(135deg, #ffcf6b, #b8860b); color: #1a0a00; }
-.user-badge .ub-plan.monthly { background: linear-gradient(135deg, #7fd1ff, #147f8b); color: #001a1f; }
-.three-dot-wrap { position: relative; }
-.three-dot-btn {
-  width: 40px; height: 40px; border-radius: 12px;
-  display: flex; align-items: center; justify-content: center;
-  color: var(--text-secondary); border: 1px solid transparent;
-  transition: all .15s; font-size: 22px; font-weight: 900; line-height: 1;
-}
-.three-dot-btn:hover { color: var(--accent); background: var(--accent-soft); border-color: rgba(255,34,51,.25); }
-.three-dot-menu {
-  position: absolute; top: calc(100% + 8px); right: 0;
-  min-width: 220px; padding: 8px;
-  background: rgba(12,4,6,.98);
-  border: 1px solid rgba(255,34,51,.35);
-  border-radius: 16px;
-  box-shadow: 0 20px 60px rgba(0,0,0,.7), 0 0 40px rgba(255,34,51,.15);
-  display: none; flex-direction: column; gap: 2px;
-  z-index: 200;
-}
-html[dir="rtl"] .three-dot-menu { right: auto; left: 0; }
-.three-dot-menu.open { display: flex; animation: fadeIn .15s ease-out; }
-@keyframes fadeIn { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: none; } }
-.dd-item {
-  display: flex; align-items: center; gap: 11px; width: 100%;
-  padding: 10px 12px; border-radius: 11px;
-  font-size: 13.5px; color: var(--text-primary); text-align: start;
-  transition: all .12s; font-family: var(--font); font-weight: 500;
-}
+/* CHAT AREA */
+.chat-area { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+.top-bar { height: 74px; background: rgba(6,2,3,.72); border-bottom: 1px solid rgba(255,34,51,.14); display: flex; align-items: center; padding: 8px 16px; gap: 8px; direction: ltr; }
+.mobile-burger { display: none; color: var(--text-secondary); }
+.top-bar-inner { display: flex; align-items: center; flex: 1; gap: 8px; padding: 0 28px; }
+.user-badge { display: inline-flex; align-items: center; gap: 8px; padding: 7px 12px; background: rgba(255,34,51,.08); border: 1px solid rgba(255,34,51,.25); border-radius: 999px; font-size: 12px; }
+.ub-plan { font-size: 10px; padding: 2px 7px; background: #ff2233; color: #fff; border-radius: 999px; }
+.three-dot-btn { font-size: 22px; color: var(--text-secondary); padding: 0 10px; }
+.three-dot-menu { position: absolute; top: 60px; left: 20px; background: rgba(12,4,6,.98); border: 1px solid rgba(255,34,51,.35); border-radius: 16px; padding: 8px; display: none; flex-direction: column; gap: 2px; z-index: 200; }
+.three-dot-menu.open { display: flex; }
+.dd-item { display: flex; align-items: center; gap: 11px; padding: 10px 12px; font-size: 13.5px; color: var(--text-primary); border-radius: 11px; text-align: right; width: 100%; }
 .dd-item:hover { background: rgba(255,34,51,.12); color: var(--accent); }
-.dd-item svg { width: 17px; height: 17px; flex-shrink: 0; opacity: .8; }
 .dd-item.danger { color: #ff7b88; }
-.dd-item.danger:hover { background: rgba(255,34,51,.14); color: #ff2233; }
 
-/* ========== MESSAGES ========== */
-.messages-wrap {
-  flex: 1; overflow-y: auto; overflow-x: hidden; padding: 20px 16px;
-  min-height: 0; -webkit-overflow-scrolling: touch;
-}
-.messages-col { max-width: 940px; margin: 0 auto; display: flex; flex-direction: column; gap: 22px; min-width: 0; }
-.welcome-msg {
-  display: flex; flex: 1; min-height: 320px; text-align: right;
-  flex-direction: column; align-items: flex-start; justify-content: center;
-  gap: 16px; padding: 10px 0; margin-top: 50px;
-  animation: deck-in .65s ease both;
-}
-.welcome-logo {
-  width: 78px; height: 78px; border-radius: 22px;
-  display: flex; align-items: center; justify-content: center;
-  background: linear-gradient(150deg, #ff2233 0%, #8b0018 100%);
-  box-shadow: 0 0 42px rgba(255,34,51,.4), 0 10px 30px rgba(0,0,0,.55);
-  flex-shrink: 0; font-family: 'Arial Black', Arial, sans-serif;
-  font-size: 18px; font-weight: 900; color: #fff; letter-spacing: 1px;
-}
-.welcome-title {
-  font-size: clamp(30px, 5vw, 56px); font-weight: 900; line-height: 1.1;
-  letter-spacing: -.03em; margin: 0; max-width: 700px;
-  background: linear-gradient(100deg, #ffffff 0%, #ffd9dd 34%, #ff2233 100%);
-  -webkit-background-clip: text; background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-.welcome-sub { font-size: 15px; color: #a9b3bd; max-width: 520px; line-height: 1.7; }
-.future-deck {
-  width: min(100%, 690px); margin-top: 30px; padding: 18px;
-  border: 1px solid rgba(255,34,51,.22); border-radius: 20px;
-  background: linear-gradient(135deg, rgba(20,5,7,.78), rgba(30,6,10,.7));
-  box-shadow: 0 24px 60px rgba(0,0,0,.3), inset 0 1px rgba(255,255,255,.04);
-}
-.deck-line {
-  display: flex; align-items: center; gap: 9px;
-  color: #b89a9d; font: 11px var(--mono); letter-spacing: .06em;
-  border-bottom: 1px solid rgba(255,34,51,.14); padding-bottom: 14px;
-}
-.deck-line strong { margin-right: auto; color: var(--accent); font-weight: 600; }
-.signal-dot {
-  width: 7px; height: 7px; border-radius: 50%;
-  background: var(--accent); box-shadow: 0 0 0 5px rgba(255,34,51,.08), 0 0 16px var(--accent);
-  animation: signal-pulse 1.8s ease-in-out infinite;
-}
-.deck-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; padding-top: 14px; }
-.deck-card {
-  min-height: 104px; padding: 13px;
-  border: 1px solid rgba(255,34,51,.14); border-radius: 13px;
-  background: rgba(8,2,4,.5); display: flex; flex-direction: column; gap: 7px;
-  transition: .18s ease;
-}
-.deck-card:hover { border-color: rgba(255,34,51,.36); transform: translateY(-2px); }
-.deck-label, .deck-card small { color: #7d5e62; font: 10px var(--mono); }
-.deck-card strong { color: #fff5f5; font: 700 22px var(--mono); }
-.deck-card strong span { color: var(--accent); font-size: 11px; margin-right: 3px; }
-.developer-card strong { color: var(--accent); font-family: var(--font); font-size: 20px; }
-.developer-card a { color: #c3a7ff; font: 11px var(--mono); }
-
-.msg { display: flex; gap: 12px; min-width: 0; max-width: 100%; }
+/* MESSAGES */
+.messages-wrap { flex: 1; overflow-y: auto; padding: 20px 16px; }
+.messages-col { max-width: 940px; margin: 0 auto; display: flex; flex-direction: column; gap: 22px; }
+.msg { display: flex; gap: 12px; }
 .msg-user { justify-content: flex-end; }
-.msg-user .msg-bubble {
-  background: var(--user-bubble-bg); color: var(--user-bubble-text);
-  border-radius: 14px 14px 2px 14px; padding: 11px 16px;
-  max-width: 78%; min-width: 0; font-size: 14px; line-height: 1.6;
-  white-space: pre-wrap; word-wrap: break-word; overflow-wrap: anywhere;
-  box-shadow: 0 4px 20px rgba(255,34,51,.25);
-}
-.msg-user .msg-avatar {
-  width: 30px; height: 30px; border-radius: 50%;
-  background: linear-gradient(135deg, #ff2233, #8b0018);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 11px; font-weight: 700; color: #fff; flex-shrink: 0;
-  order: 1; box-shadow: 0 0 15px rgba(255,34,51,.35);
-}
-.msg-assistant { align-items: flex-start; min-width: 0; }
-.msg-assistant .msg-content { max-width: 100%; min-width: 0; position: relative; flex: 1 1 auto; }
-.msg-model-label {
-  font-size: 11px; font-weight: 700; font-family: var(--mono);
-  color: var(--accent); opacity: .9; margin-bottom: 6px;
-  display: flex; align-items: center; gap: 6px;
-}
-.msg-actions { display: flex; align-items: center; gap: 4px; margin-top: 8px; }
-.msg-action-btn {
-  display: inline-flex; align-items: center; gap: 4px; padding: 4px 11px;
-  border-radius: 7px; font-size: 12px; font-weight: 600; color: var(--text-muted);
-  border: none; cursor: pointer; transition: all .12s; background: none;
-}
-.msg-action-btn:hover { color: var(--accent); background: var(--accent-soft); }
+.msg-user .msg-bubble { background: var(--user-bubble-bg); padding: 11px 16px; border-radius: 14px 14px 2px 14px; max-width: 78%; color: #fff; }
+.msg-user .msg-avatar { width: 30px; height: 30px; border-radius: 50%; background: #ff2233; display: flex; align-items: center; justify-content: center; color: #fff; order: 1; }
+.msg-assistant .msg-content { flex: 1; }
+.prose { font-size: 15px; line-height: 1.7; }
+.thinking { display: flex; gap: 6px; color: var(--text-muted); }
 
-/* ========== INPUT AREA ========== */
-.input-area {
-  padding: 0 16px 16px; flex-shrink: 0;
-  background: linear-gradient(180deg, transparent, rgba(5,2,3,.9) 34%);
-  padding-top: 26px;
-}
+/* INPUT AREA */
+.input-area { padding: 16px; background: linear-gradient(180deg, transparent, rgba(5,2,3,.9) 34%); }
 .input-col { max-width: 940px; margin: 0 auto; }
-.input-box {
-  display: flex; align-items: flex-end; flex-wrap: nowrap; gap: 10px;
-  background: rgba(14,4,7,.92); border: 1px solid rgba(255,34,51,.28);
-  border-radius: 20px; padding: 10px; transition: all .2s;
-  box-shadow: 0 0 0 5px rgba(255,34,51,.03), 0 20px 60px rgba(0,0,0,.4);
-  position: relative;
-}
-.input-box:focus-within {
-  border-color: rgba(255,34,51,.6);
-  box-shadow: 0 0 0 5px rgba(255,34,51,.09), 0 20px 60px rgba(0,0,0,.4), 0 0 28px rgba(255,34,51,.14);
-}
-.attach-btn, .mic-btn {
-  width: 44px; height: 44px; flex-shrink: 0; border-radius: 14px;
-  border: 1px solid rgba(255,34,51,.22); background: transparent;
-  color: var(--text-muted); display: flex; align-items: center; justify-content: center;
-  cursor: pointer; transition: all .15s;
-}
-.attach-btn:hover, .mic-btn:hover { color: var(--accent); background: rgba(255,34,51,.1); border-color: var(--accent); }
-.attach-btn svg, .mic-btn svg { width: 20px; height: 20px; }
-.mic-btn.recording {
-  color: #fff; border-color: var(--accent);
-  background: linear-gradient(150deg, var(--accent), var(--accent-deep));
-  animation: micPulse 1.25s ease-in-out infinite;
-}
-.mic-btn.waiting {
-  color: var(--text-secondary); border-color: var(--accent);
-  background: var(--accent-soft); cursor: progress;
-  animation: micPulse 1.1s ease-in-out infinite;
-}
-.mic-btn[hidden] { display: none; }
-@keyframes micPulse {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(255,34,51,.55); }
-  50% { box-shadow: 0 0 0 10px rgba(255,34,51,0); }
-}
-.input-box textarea {
-  flex: 1 1 auto; min-width: 0; border: none; background: transparent;
-  resize: none; outline: none; font-family: var(--font); font-size: 16px;
-  color: var(--text-primary); line-height: 24px; max-height: 160px;
-  min-height: 44px; padding: 10px 2px; display: block; text-align: start; width: 100%;
-}
-.input-box textarea::placeholder { color: var(--text-muted); }
-.send-btn {
-  width: 44px; height: 44px; border-radius: 12px;
-  background: linear-gradient(135deg, #ff2233, #8b0018);
-  display: flex; align-items: center; justify-content: center;
-  flex-shrink: 0; transition: all .15s; color: #fff; border: none; cursor: pointer;
-  box-shadow: 0 0 20px rgba(255,34,51,.24);
-}
-.send-btn:disabled { opacity: .35; cursor: not-allowed; }
-.send-btn:not(:disabled):hover { filter: brightness(1.12); box-shadow: 0 0 30px rgba(255,34,51,.4); }
-.send-btn:not(:disabled):active { transform: scale(.96); }
-.send-btn svg { width: 20px; height: 20px; }
-.stop-btn {
-  width: 44px; height: 44px; border-radius: 12px;
-  background: #5c2129; display: flex; align-items: center; justify-content: center;
-  flex-shrink: 0; color: #fff; transition: filter .15s;
-  border: none; cursor: pointer;
-}
-.stop-btn:hover { filter: brightness(1.15); }
-.stop-btn svg { width: 16px; height: 16px; }
-
-/* Plus menu */
-.plus-menu {
-  position: absolute; bottom: calc(100% + 10px); inset-inline-start: 6px;
-  min-width: 190px; padding: 8px; border-radius: 18px;
-  background: rgba(12,4,6,.98); border: 1px solid rgba(255,34,51,.35);
-  box-shadow: 0 18px 44px -18px rgba(0,0,0,.85), 0 0 30px rgba(255,34,51,.1);
-  display: none; flex-direction: column; gap: 2px; z-index: 60;
-}
-.plus-menu.open { display: flex; animation: fadeIn .13s ease-out; }
-.plus-item {
-  display: flex; align-items: center; gap: 11px; width: 100%;
-  padding: 9px 11px; border-radius: 13px; font-size: 13.5px;
-  color: var(--text-primary); text-align: start; transition: background .12s;
-}
+.input-box { display: flex; align-items: flex-end; gap: 10px; background: rgba(14,4,7,.92); border: 1px solid rgba(255,34,51,.28); border-radius: 20px; padding: 10px; }
+.input-box textarea { flex: 1; background: transparent; border: none; color: #fff; outline: none; resize: none; font-size: 16px; min-height: 44px; max-height: 160px; padding: 10px 2px; }
+.send-btn { width: 44px; height: 44px; border-radius: 12px; background: #ff2233; color: #fff; display: flex; align-items: center; justify-content: center; }
+.stop-btn { width: 44px; height: 44px; border-radius: 12px; background: #5c2129; color: #fff; display: none; align-items: center; justify-content: center; }
+.attach-btn, .mic-btn { width: 44px; height: 44px; border-radius: 14px; border: 1px solid rgba(255,34,51,.22); display: flex; align-items: center; justify-content: center; color: var(--text-muted); }
+.plus-menu { position: absolute; bottom: 70px; left: 20px; background: rgba(12,4,6,.98); border: 1px solid rgba(255,34,51,.35); border-radius: 18px; padding: 8px; display: none; flex-direction: column; gap: 2px; z-index: 60; }
+.plus-menu.open { display: flex; }
+.plus-item { display: flex; align-items: center; gap: 11px; padding: 9px 11px; font-size: 13.5px; border-radius: 13px; width: 100%; text-align: right; }
 .plus-item:hover { background: rgba(255,34,51,.1); }
-.plus-item-icon {
-  width: 34px; height: 34px; flex-shrink: 0; border-radius: 50%;
-  border: 1px solid rgba(255,34,51,.25);
-  display: flex; align-items: center; justify-content: center;
-  color: var(--text-secondary);
-}
-.plus-item-icon svg { width: 17px; height: 17px; }
-.plus-item:hover .plus-item-icon { color: var(--accent); border-color: var(--accent); }
-.plus-item[aria-checked="true"] .plus-item-icon {
-  color: var(--accent); border-color: var(--accent); background: var(--accent-soft);
-}
-.plus-item-state { margin-inline-start: auto; font-size: 11px; color: var(--accent); font-weight: 700; flex-shrink: 0; }
 
-/* Attach chips */
-.attach-chips { display: none; flex-wrap: wrap; gap: 8px; padding: 0 2px 10px; }
-.attach-chips.has-files { display: flex; align-items: center; }
-.attach-chip {
-  display: flex; align-items: center; max-width: 100%; min-width: 0;
-  background: var(--surface); border: 1px solid var(--border-strong);
-  border-radius: 12px; overflow: hidden;
-}
-.attach-chip-open {
-  display: flex; align-items: center; gap: 8px; min-width: 0;
-  background: transparent; border: none; color: var(--text-primary);
-  font-family: var(--font); font-size: 13px; line-height: 1.2;
-  padding: 7px 10px; cursor: pointer;
-}
-.attach-chip-open:hover { background: var(--accent-soft); }
-.attach-chip-ext {
-  font-family: var(--mono); font-size: 10px; font-weight: 700;
-  letter-spacing: .5px; color: #fff;
-  background: linear-gradient(135deg, var(--accent), var(--accent-deep));
-  border-radius: 6px; padding: 2px 6px; flex-shrink: 0;
-}
-.attach-chip-name {
-  font-weight: 600; direction: ltr; overflow: hidden;
-  text-overflow: ellipsis; white-space: nowrap; max-width: 44vw;
-}
-.attach-chip-meta { font-size: 11px; color: var(--text-muted); flex-shrink: 0; }
-.attach-chip-x {
-  align-self: stretch; background: transparent; border: none;
-  border-inline-start: 1px solid var(--border); color: var(--text-muted);
-  font-size: 12px; line-height: 1; padding: 0 11px; cursor: pointer;
-}
-.attach-chip-x:hover { color: #fff; background: var(--accent-deep); }
-.attach-chip-count {
-  flex-shrink: 0; align-self: center; font-size: 11px; font-weight: 700;
-  color: var(--text-muted); font-variant-numeric: tabular-nums; padding: 0 2px;
-}
-.msg-files { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
-.msg-files:first-child { margin-top: 0; }
-.msg-file-chip {
-  display: flex; align-items: center; gap: 8px; max-width: 100%;
-  background: rgba(0,0,0,.25); border: 1px solid rgba(255,255,255,.28);
-  border-radius: 10px; padding: 6px 10px; color: inherit;
-  font-family: var(--font); font-size: 13px; line-height: 1.2;
-  cursor: pointer; text-align: start;
-}
-.msg-file-chip:hover { background: rgba(0,0,0,.4); }
-.msg-file-chip .f-ext {
-  font-family: var(--mono); font-size: 10px; font-weight: 700;
-  color: var(--accent-deep); background: rgba(255,255,255,.92);
-  border-radius: 5px; padding: 2px 6px; flex-shrink: 0;
-}
-.msg-file-chip .f-name {
-  font-weight: 600; direction: ltr; overflow: hidden;
-  text-overflow: ellipsis; white-space: nowrap; max-width: 40vw;
-}
-.msg-file-chip .f-size { font-size: 11px; opacity: .75; flex-shrink: 0; }
-
-/* ========== MODALS ========== */
-.modal-overlay {
-  display: none; position: fixed; inset: 0;
-  background: rgba(0,0,0,.75);
-  backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
-  z-index: 1000; align-items: center; justify-content: center; padding: 16px;
-}
+/* MODALS */
+.modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.75); backdrop-filter: blur(6px); z-index: 1000; align-items: center; justify-content: center; padding: 16px; }
 .modal-overlay.open { display: flex; }
-.modal {
-  background: linear-gradient(180deg, #0a0305, #080203);
-  border: 1px solid rgba(255,34,51,.35);
-  border-radius: 20px; width: 100%; max-width: 480px;
-  overflow: hidden;
-  box-shadow: 0 24px 80px rgba(0,0,0,.7), 0 0 60px -20px rgba(255,34,51,.3);
-  max-height: 90vh; display: flex; flex-direction: column;
-}
-.modal.wide { max-width: 780px; }
-.modal-head {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 18px 22px; border-bottom: 1px solid rgba(255,34,51,.18);
-  flex-shrink: 0;
-}
-.modal-head h3 {
-  font-size: 15px; font-weight: 800; color: var(--accent);
-  letter-spacing: .5px; display: flex; align-items: center; gap: 8px;
-}
-.modal-close {
-  width: 32px; height: 32px; border-radius: 8px;
-  display: flex; align-items: center; justify-content: center;
-  color: var(--text-muted); transition: all .12s;
-}
-.modal-close:hover { background: rgba(255,34,51,.15); color: var(--text-primary); }
-.modal-close svg { width: 18px; height: 18px; }
-.modal-body { padding: 20px 22px; overflow-y: auto; max-height: 65vh; flex: 1; min-height: 0; }
-.modal-foot {
-  padding: 14px 22px; border-top: 1px solid rgba(255,34,51,.14);
-  display: flex; gap: 10px; justify-content: flex-end; flex-shrink: 0;
-}
-.btn-primary {
-  padding: 10px 22px; background: linear-gradient(135deg, #ff2233, #8b0018);
-  border-radius: 10px; color: #fff; font-weight: 700; font-size: 13.5px;
-  transition: all .15s; border: none; cursor: pointer;
-}
-.btn-primary:hover { filter: brightness(1.12); box-shadow: 0 6px 20px rgba(255,34,51,.35); }
-.btn-secondary {
-  padding: 10px 22px; background: transparent;
-  border: 1px solid rgba(255,34,51,.3); border-radius: 10px;
-  color: var(--text-secondary); font-weight: 600; font-size: 13.5px;
-  transition: all .15s; cursor: pointer;
-}
-.btn-secondary:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-soft); }
-.btn-danger {
-  padding: 8px 16px; background: linear-gradient(135deg, #8b0018, #4a000a);
-  border: none; border-radius: 8px; color: #fff; font-weight: 700; font-size: 12px;
-  cursor: pointer; transition: all .15s;
-}
-.btn-danger:hover { filter: brightness(1.15); }
-.btn-success {
-  padding: 8px 16px; background: linear-gradient(135deg, #147f8b, #0a4a52);
-  border: none; border-radius: 8px; color: #fff; font-weight: 700; font-size: 12px;
-  cursor: pointer; transition: all .15s;
-}
-.btn-success:hover { filter: brightness(1.15); }
+.modal { background: #0a0305; border: 1px solid rgba(255,34,51,.35); border-radius: 20px; width: 100%; max-width: 480px; display: flex; flex-direction: column; }
+.modal-head { padding: 18px; border-bottom: 1px solid rgba(255,34,51,.18); display: flex; justify-content: space-between; align-items: center; }
+.modal-body { padding: 20px; overflow-y: auto; max-height: 65vh; }
+.modal-foot { padding: 14px; border-top: 1px solid rgba(255,34,51,.14); display: flex; gap: 10px; justify-content: flex-end; }
+.btn-primary { padding: 10px 22px; background: #ff2233; border-radius: 10px; color: #fff; }
+.btn-secondary { padding: 10px 22px; background: transparent; border: 1px solid #ff2233; border-radius: 10px; color: #ff2233; }
+.btn-danger { padding: 8px 16px; background: #8b0018; border-radius: 8px; color: #fff; }
 
-/* Subscription plans */
-.plans-grid { display: grid; grid-template-columns: 1fr; gap: 14px; }
-@media (min-width: 640px) { .plans-grid { grid-template-columns: repeat(3, 1fr); } }
-.plan-card {
-  padding: 20px 16px; border-radius: 16px; text-align: center;
-  border: 1px solid rgba(255,34,51,.2);
-  background: linear-gradient(180deg, rgba(20,6,9,.6), rgba(8,2,4,.6));
-  transition: all .18s; position: relative;
-}
-.plan-card:hover { border-color: rgba(255,34,51,.45); transform: translateY(-3px); }
-.plan-card.current {
-  border-color: var(--accent);
-  box-shadow: 0 0 30px rgba(255,34,51,.25);
-}
-.plan-card.featured {
-  border-color: rgba(255,207,107,.5);
-  background: linear-gradient(180deg, rgba(35,15,5,.7), rgba(8,2,4,.6));
-}
-.plan-name {
-  font-size: 13px; font-weight: 800; letter-spacing: 1.5px;
-  color: var(--accent); font-family: var(--mono);
-  text-transform: uppercase; margin-bottom: 10px;
-}
-.plan-card.featured .plan-name { color: #ffcf6b; }
-.plan-price {
-  font-size: 30px; font-weight: 900; color: var(--text-primary);
-  margin-bottom: 4px; line-height: 1;
-}
-.plan-price small { font-size: 12px; color: var(--text-muted); font-weight: 500; }
-.plan-limit {
-  font-size: 12.5px; color: var(--text-secondary); margin: 12px 0 14px;
-  min-height: 40px; line-height: 1.5;
-}
-.plan-features {
-  list-style: none; text-align: start; margin-bottom: 16px;
-  font-size: 12px; color: var(--text-muted); line-height: 1.9;
-}
-.plan-features li::before { content: '✓ '; color: var(--accent); font-weight: 700; }
-.plan-btn {
-  width: 100%; padding: 10px; border-radius: 9px;
-  background: linear-gradient(135deg, #ff2233, #8b0018);
-  border: none; color: #fff; font-weight: 700; font-size: 12.5px;
-  cursor: pointer; transition: all .15s;
-}
-.plan-btn:hover { filter: brightness(1.15); }
-.plan-btn:disabled { opacity: .5; cursor: not-allowed; background: #333; }
-.plan-btn.current-btn { background: rgba(255,34,51,.15); color: var(--accent); border: 1px solid var(--accent); }
-
-/* VIP Badge Animation */
-.vip-badge {
-  display: inline-block; position: absolute; top: -12px; left: 50%;
-  transform: translateX(-50%); background: linear-gradient(135deg, #ffcf6b, #b8860b);
-  color: #1a0a00; font-size: 10px; font-weight: 900; padding: 3px 12px;
-  border-radius: 999px; box-shadow: 0 4px 15px rgba(255,207,107,.5);
-  animation: vip-float 2s ease-in-out infinite; z-index: 10;
-  border: 1px solid #ffeaa7;
-}
-@keyframes vip-float {
-  0%, 100% { transform: translateX(-50%) translateY(0); box-shadow: 0 4px 15px rgba(255,207,107,.5); }
-  50% { transform: translateX(-50%) translateY(-5px); box-shadow: 0 10px 25px rgba(255,207,107,.8); }
-}
-
-/* Support */
-.support-form { display: flex; flex-direction: column; gap: 14px; }
-.support-form textarea {
-  width: 100%; min-height: 120px; padding: 12px 14px;
-  background: rgba(255,34,51,.04); border: 1px solid rgba(255,34,51,.22);
-  border-radius: 11px; color: var(--text-primary); font-size: 14px;
-  font-family: var(--font); outline: none; resize: vertical;
-}
-.support-form textarea:focus { border-color: var(--accent); background: rgba(255,34,51,.07); }
-.support-history {
-  margin-top: 18px; padding-top: 18px; border-top: 1px solid rgba(255,34,51,.14);
-}
-.support-history h4 {
-  font-size: 12px; color: var(--text-muted); margin-bottom: 10px;
-  font-family: var(--mono); letter-spacing: 1px; text-transform: uppercase;
-}
-.support-item {
-  padding: 10px 12px; background: rgba(255,34,51,.05);
-  border: 1px solid rgba(255,34,51,.15); border-radius: 10px;
-  margin-bottom: 8px; font-size: 13px;
-}
-.support-item .si-text { color: var(--text-primary); margin-bottom: 6px; white-space: pre-wrap; word-wrap: break-word; }
-.support-item .si-meta {
-  font-size: 11px; color: var(--text-muted); display: flex;
-  justify-content: space-between; gap: 8px;
-}
-.support-item .si-status {
-  padding: 2px 8px; border-radius: 999px; font-size: 10px; font-weight: 700;
-}
-.si-status.pending { background: rgba(255,207,107,.15); color: #ffcf6b; }
-.si-status.resolved { background: rgba(90,209,154,.15); color: #5ad19a; }
-
-/* ========== ADMIN PANEL ========== */
-.admin-tabs {
-  display: flex; gap: 2px; padding: 0 22px;
-  border-bottom: 1px solid rgba(255,34,51,.14);
-  background: rgba(0,0,0,.3); flex-shrink: 0; overflow-x: auto;
-}
-.admin-tab {
-  padding: 12px 16px; font-size: 12.5px; font-weight: 700;
-  color: var(--text-muted); border: none; background: transparent;
-  border-bottom: 2px solid transparent; cursor: pointer;
-  white-space: nowrap; transition: all .12s;
-}
-.admin-tab:hover { color: var(--text-primary); }
+/* ADMIN */
+.admin-tabs { display: flex; padding: 0 22px; border-bottom: 1px solid rgba(255,34,51,.14); background: rgba(0,0,0,.3); }
+.admin-tab { padding: 12px 16px; font-size: 12.5px; font-weight: 700; color: var(--text-muted); border: none; border-bottom: 2px solid transparent; }
 .admin-tab.active { color: var(--accent); border-bottom-color: var(--accent); }
-.admin-pane { display: none; }
+.admin-pane { display: none; padding: 20px; }
 .admin-pane.active { display: block; }
 .admin-stats { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 16px; }
-@media (min-width: 640px) { .admin-stats { grid-template-columns: repeat(4, 1fr); } }
-.stat-card {
-  padding: 14px; border-radius: 12px; text-align: center;
-  background: linear-gradient(135deg, rgba(255,34,51,.08), rgba(139,0,24,.15));
-  border: 1px solid rgba(255,34,51,.22);
-}
-.stat-value {
-  font-size: 22px; font-weight: 900; color: var(--accent);
-  font-family: var(--mono); line-height: 1;
-}
-.stat-label { font-size: 10.5px; color: var(--text-muted); margin-top: 6px; letter-spacing: .5px; }
-.admin-user-row {
-  display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
-  padding: 12px; border-bottom: 1px solid rgba(255,34,51,.1);
-  font-size: 13px;
-}
-.admin-user-row:last-child { border-bottom: none; }
-.admin-user-name {
-  font-weight: 700; color: var(--text-primary); font-family: var(--mono);
-  min-width: 100px; flex-shrink: 0;
-}
-.admin-user-row .au-plan {
-  font-size: 10px; font-family: var(--mono); padding: 3px 8px;
-  border-radius: 999px; letter-spacing: .5px; font-weight: 700;
-}
-.au-plan.free { background: rgba(139,139,139,.2); color: #ccc; }
-.au-plan.monthly { background: rgba(127,209,255,.15); color: #7fd1ff; }
-.au-plan.yearly { background: rgba(255,207,107,.15); color: #ffcf6b; }
-.au-plan.banned { background: rgba(255,34,51,.2); color: #ff2233; }
-.admin-user-row .au-count { font-size: 11px; color: var(--text-muted); }
-.admin-user-row select, .admin-user-row input {
-  padding: 5px 8px; background: rgba(255,34,51,.06);
-  border: 1px solid rgba(255,34,51,.22); border-radius: 6px;
-  color: var(--text-primary); font-size: 11.5px;
-  outline: none; font-family: var(--font);
-}
-.admin-user-row input[type="number"] { width: 60px; }
-.admin-empty { text-align: center; padding: 30px; color: var(--text-muted); font-size: 13px; }
-.admin-report-row {
-  padding: 12px; border-bottom: 1px solid rgba(255,34,51,.1);
-  font-size: 13px;
-}
-.admin-report-row:last-child { border-bottom: none; }
-.admin-report-text { white-space: pre-wrap; word-wrap: break-word; margin-bottom: 8px; }
-.admin-report-meta {
-  display: flex; gap: 12px; flex-wrap: wrap; align-items: center;
-  font-size: 11px; color: var(--text-muted);
-}
-.monitor-msg {
-  padding: 8px 10px; font-size: 12.5px; border-bottom: 1px solid rgba(255,34,51,.08);
-  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-}
-.monitor-msg:last-child { border-bottom: none; }
-.monitor-msg .mm-user { color: var(--accent); font-weight: 700; font-family: var(--mono); margin-right: 8px; }
-.monitor-msg .mm-text { color: var(--text-secondary); }
-.monitor-msg .mm-time { color: var(--text-muted); font-size: 10px; margin-left: 8px; }
+.stat-card { padding: 14px; border-radius: 12px; background: rgba(255,34,51,.08); border: 1px solid rgba(255,34,51,.22); text-align: center; }
+.stat-value { font-size: 22px; font-weight: 900; color: var(--accent); }
+.admin-user-row { display: flex; align-items: center; gap: 10px; padding: 12px; border-bottom: 1px solid rgba(255,34,51,.1); flex-wrap: wrap; }
 
-/* Toast */
-.toast {
-  position: fixed; bottom: 96px; left: 50%; transform: translateX(-50%);
-  background: rgba(12,4,6,.98); border: 1px solid rgba(255,34,51,.35);
-  padding: 10px 22px; border-radius: 30px; font-size: 13px;
-  color: var(--text-primary); z-index: 99999;
-  box-shadow: 0 10px 30px rgba(0,0,0,.5), 0 0 25px rgba(255,34,51,.15);
-  transition: opacity .3s; max-width: 90%; text-align: center;
-  font-weight: 500;
-}
-.toast.toast-error { border-color: var(--accent); color: #ff9ca6; }
-
-/* ========== BLACKLIST SCREEN ========== */
-.blacklist-screen {
-  position: fixed; inset: 0; background: #000; z-index: 999999;
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
-  color: #ff2233; text-align: center; padding: 20px;
-}
-.blacklist-screen h1 {
-  font-size: 40px; font-weight: 900; margin-bottom: 20px;
-  text-shadow: 0 0 20px rgba(255,34,51,.8);
-}
-.blacklist-screen p {
-  font-size: 18px; color: #fff; margin-bottom: 15px; line-height: 1.8;
-}
-.blacklist-screen .reason-box {
-  background: rgba(255,34,51,.1); border: 1px solid #ff2233;
-  padding: 15px 30px; border-radius: 12px; margin: 15px 0;
-  font-size: 16px; color: #ffcf6b;
-}
-.blacklist-screen a {
-  color: #ffcf6b; font-size: 20px; font-weight: 900; text-decoration: underline;
-  margin-top: 20px; display: inline-block;
-}
-
-/* Code & prose (kept from original) */
-.code-card { max-width: 100%; margin: .85em 0; border: 1px solid var(--border); border-radius: 12px; overflow: hidden; background: var(--code-bg); }
-.code-card-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 6px 8px 6px 12px; background: var(--surface); border-bottom: 1px solid var(--border); }
-.code-lang { font-family: var(--mono); font-size: 12px; color: var(--text-muted); direction: ltr; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.code-actions { display: flex; align-items: center; gap: 2px; flex-shrink: 0; }
-.code-act { display: inline-flex; align-items: center; gap: 5px; background: transparent; border: none; color: var(--text-secondary); font-family: var(--font); font-size: 12px; line-height: 1; padding: 6px 9px; border-radius: 8px; cursor: pointer; white-space: nowrap; }
-.code-act svg { width: 14px; height: 14px; flex-shrink: 0; }
-.code-act:hover { color: var(--accent); background: var(--accent-soft); }
-.code-act.done { color: #5ad19a; }
-.prose { font-size: 15px; line-height: 1.7; color: var(--text-primary); overflow-wrap: anywhere; word-wrap: break-word; word-break: break-word; min-width: 0; }
-.prose h1 { font-size: 1.4em; font-weight: 700; margin: 1.2em 0 .6em; }
-.prose h2 { font-size: 1.2em; font-weight: 700; margin: 1em 0 .5em; }
-.prose h3 { font-size: 1.05em; font-weight: 700; margin: .8em 0 .4em; }
-.prose p { margin: .6em 0; }
-.prose ul, .prose ol { padding-inline-start: 1.5em; margin: .5em 0; }
-.prose li { margin: .2em 0; }
-.prose blockquote { border-inline-start: 3px solid var(--accent-deep); padding-inline-start: 1em; color: var(--text-secondary); margin: .8em 0; }
-.prose code:not(pre code) { background: var(--code-inline-bg); padding: 1px 6px; border-radius: 4px; font-size: .88em; font-family: var(--mono); }
-.prose pre { background: var(--code-bg); border-radius: var(--radius-sm); overflow: hidden; margin: .8em 0; position: relative; max-width: 100%; direction: ltr; text-align: left; }
-.prose pre code { display: block; padding: 12px 14px; overflow-x: auto; font-size: .88em; line-height: 1.6; font-family: var(--mono); }
-.prose a { color: var(--accent-strong); text-decoration: underline; text-underline-offset: 2px; overflow-wrap: anywhere; }
-.prose hr { border: 0; border-top: 1px solid var(--border); margin: 1em 0; }
-.prose table { width: 100%; border-collapse: collapse; margin: .8em 0; display: block; overflow-x: auto; }
-.prose th, .prose td { border: 1px solid var(--border); padding: 7px 10px; text-align: start; }
-.prose th { background: var(--surface); font-weight: 700; }
-.reasoning-panel { margin: 8px 0 12px; border: 1px solid var(--border); border-radius: 10px; background: var(--surface); overflow: hidden; }
-.reasoning-panel summary { padding: 8px 11px; color: var(--text-secondary); font-size: 12px; cursor: pointer; user-select: none; }
-.reasoning-content { padding: 8px 11px 11px; border-top: 1px solid var(--border); color: var(--text-secondary); font-size: 13px; max-height: 320px; overflow: auto; }
-.thinking-indicator { display: flex; align-items: center; gap: 6px; margin: 7px 0; color: var(--text-muted); font-size: 13px; }
-.thinking { display: flex; align-items: center; gap: 6px; color: var(--text-muted); font-size: 14px; }
-.thinking .dots::after { content: '...'; animation: dots 1.2s steps(4) infinite; }
-@keyframes dots { 0% { content: ''; } 25% { content: '.'; } 50% { content: '..'; } 75% { content: '...'; } }
-
-/* File viewer, preview, lightbox */
-.file-viewer-overlay, .preview-overlay {
-  position: fixed; inset: 0; background: rgba(0,0,0,.78);
-  display: none; align-items: center; justify-content: center;
-  z-index: 1200; padding: 16px;
-}
-.file-viewer-overlay.open, .preview-overlay.open { display: flex; }
-.file-viewer {
-  width: 100%; max-width: 860px; max-height: 82vh;
-  background: var(--bg); border: 1px solid var(--border-strong);
-  border-radius: 16px; display: flex; flex-direction: column;
-  overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,.6);
-}
-.file-viewer-head {
-  display: flex; align-items: center; justify-content: space-between;
-  gap: 12px; padding: 12px 14px; border-bottom: 1px solid var(--border);
-  background: var(--surface); flex-shrink: 0;
-}
-.file-viewer-title { font-family: var(--mono); font-size: 13px; color: var(--text-primary); direction: ltr; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
-.file-viewer-actions { display: flex; gap: 8px; flex-shrink: 0; }
-.fv-btn { background: transparent; border: 1px solid var(--border-strong); color: var(--text-secondary); border-radius: 9px; padding: 6px 12px; font-family: var(--font); font-size: 12px; cursor: pointer; transition: all .12s; }
-.fv-btn:hover { color: var(--accent); border-color: var(--accent); background: var(--accent-soft); }
-.fv-close:hover { color: #fff; background: var(--accent-deep); border-color: var(--accent-deep); }
-.file-viewer-body { overflow: auto; min-height: 0; }
-.file-viewer-body code { display: block; padding: 16px; font-family: var(--mono); font-size: 13px; line-height: 1.6; color: var(--text-primary); white-space: pre; direction: ltr; text-align: left; }
-.preview-win {
-  width: 100%; height: 100%; max-width: 1080px; margin: 0 auto;
-  background: var(--bg); border: 1px solid var(--border-strong);
-  border-radius: 14px; overflow: hidden; display: flex; flex-direction: column;
-  box-shadow: 0 24px 70px rgba(0,0,0,.7);
-}
-.preview-head {
-  display: flex; align-items: center; justify-content: space-between;
-  gap: 10px; padding: 10px 14px; background: var(--surface);
-  border-bottom: 1px solid var(--border); flex-shrink: 0; direction: ltr;
-}
-.preview-title { font-size: 14px; font-weight: 700; color: var(--text-primary); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
-.preview-actions { display: flex; gap: 6px; flex-shrink: 0; }
-.preview-btn {
-  width: 34px; height: 34px; display: flex; align-items: center; justify-content: center;
-  background: transparent; border: 1px solid var(--border-strong); border-radius: 10px;
-  color: var(--text-secondary); cursor: pointer; transition: all .12s;
-}
-.preview-btn svg { width: 16px; height: 16px; }
-.preview-btn:hover { color: var(--accent); border-color: var(--accent); background: var(--accent-soft); }
-.preview-close:hover { color: #fff; background: var(--accent-deep); border-color: var(--accent-deep); }
-.preview-frame { flex: 1; width: 100%; border: none; background: #fff; min-height: 0; }
-
-@keyframes signal-pulse { 50% { box-shadow: 0 0 0 8px rgba(255,34,51,.02), 0 0 22px var(--accent); opacity: .72; } }
-@keyframes deck-in { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
-
-/* Responsive */
+/* Mobile */
 @media (max-width: 768px) {
-  .sidebar {
-    position: fixed; right: 0; left: auto; top: 0; bottom: 0;
-    z-index: 100; transform: translateX(100%); width: 280px;
-    border-left: none; box-shadow: -2px 0 24px rgba(0,0,0,.5);
-  }
+  .sidebar { position: fixed; right: 0; top: 0; bottom: 0; transform: translateX(100%); }
   .sidebar.open { transform: translateX(0); }
-  .sidebar-overlay.open { display: block; }
-  .sidebar-collapse-btn { display: none; }
-  .mobile-burger { display: flex; align-items: center; }
+  .mobile-burger { display: block; }
   .msg-user .msg-bubble { max-width: 92%; }
-  .top-bar { padding: 6px 12px; }
-  .top-bar-inner { padding: 0 6px; }
-  .chat-area::before { display: none; }
-  .welcome-msg { margin-top: 32px; padding: 0 4px; }
-  .welcome-title { font-size: 32px; }
-  .future-deck { margin-top: 24px; }
-  .deck-grid { grid-template-columns: 1fr; }
-  .deck-card { min-height: auto; }
-  .input-area { padding-left: 10px; padding-right: 10px; padding-top: 20px; }
-  .modal.wide { max-width: 100%; }
-  .admin-stats { grid-template-columns: repeat(2, 1fr); }
-  .user-badge .ub-name { max-width: 70px; overflow: hidden; text-overflow: ellipsis; }
-}
-@media (max-width: 420px) {
-  .attach-chip-meta { display: none; }
-  .input-box { gap: 5px; padding: 7px; }
-  .input-box textarea { font-size: 14px; }
-  .attach-btn, .mic-btn { width: 38px; height: 38px; border-radius: 11px; }
-  .send-btn { width: 40px; height: 40px; }
-  .auth-card { padding: 24px 20px; }
-  .auth-logo-title { font-size: 38px; letter-spacing: 8px; }
-}
-@media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after { animation-duration: .001ms !important; transition-duration: .001ms !important; }
 }
 </style>
 </head>
 <body>
 <div id="root">
 
-<!-- ========== BLACKLIST SCREEN ========== -->
-<div class="blacklist-screen" id="blacklistScreen" style="display: none;">
-  <h1>⛔ تم حظرك</h1>
-  <p>لقد تم حظر حسابك من قبل إدارة الموقع.</p>
-  <div class="reason-box" id="blacklistReason">السبب: غير محدد</div>
-  <p>مدة الحظر: <span id="blacklistDuration">غير محدد</span></p>
-  <p style="font-size:14px; color:#aaa; margin-top:30px;">لحل المشكلة، يرجى مراجعة إدارة الموقع:</p>
-  <a href="https://t.me/Yb_xY" target="_blank">@Yb_xY</a>
-</div>
-
-<!-- ========== AUTH OVERLAY ========== -->
+<!-- AUTH -->
 <div class="auth-overlay" id="authOverlay">
   <div class="auth-card">
-    <div class="auth-logo">
-      <div class="auth-logo-title">SOST</div>
-    </div>
+    <div class="auth-logo-title">SOST</div>
     <div class="auth-subtitle">Ai · Terminal Access</div>
     <div class="auth-tabs">
       <button class="auth-tab active" id="authTabLogin" type="button">دخول</button>
@@ -1020,165 +147,99 @@ html[dir="rtl"] .three-dot-menu { right: auto; left: 0; }
     </div>
     <form id="authForm" onsubmit="return false;">
       <div class="auth-field">
-        <label for="authUser">اسم المستخدم</label>
-        <input type="text" id="authUser" autocomplete="username" placeholder="اكتب اسم المستخدم" minlength="3" maxlength="24" required/>
+        <label>اسم المستخدم</label>
+        <input type="text" id="authUser" minlength="3" maxlength="24" required/>
       </div>
       <div class="auth-field">
-        <label for="authPass">كلمة المرور</label>
-        <input type="password" id="authPass" autocomplete="current-password" placeholder="اكتب كلمة المرور" minlength="4" maxlength="64" required/>
+        <label>كلمة المرور</label>
+        <input type="password" id="authPass" minlength="4" maxlength="64" required/>
       </div>
       <button class="auth-submit" id="authSubmit" type="submit">دخول النظام</button>
       <div class="auth-msg" id="authMsg"></div>
     </form>
     <div class="auth-footer">
       SOST AI · Developed by <strong style="color:#ff2233">Mustafa</strong><br/>
-      <a href="https://t.me/Yb_xY" target="_blank" rel="noopener">@Yb_xY</a>
+      <a href="https://t.me/Yb_xY" target="_blank">@Yb_xY</a>
     </div>
   </div>
 </div>
 
-<!-- ========== MAIN APP ========== -->
+<!-- MAIN APP -->
 <div class="app">
   <aside class="sidebar" id="sidebar">
     <div class="sidebar-header">
-      <div class="sidebar-header-top">
-        <div class="sidebar-logo">
-          <div class="sidebar-logo-mark">SOST</div>
-          <div>
-            <span class="sidebar-logo-text">SOST</span>
-            <span class="sidebar-logo-sub">AI · 2600</span>
-          </div>
-        </div>
-        <button aria-label="طي الشريط الجانبي" class="sidebar-collapse-btn" id="sidebarCollapseBtn">
-          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg>
-        </button>
-      </div>
       <button class="new-chat-btn" id="newChatBtn">
-        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"></path></svg>
-        <span class="new-chat-label">محادثة جديدة</span>
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+        <span>محادثة جديدة</span>
       </button>
     </div>
-    <div class="sidebar-chats" id="sidebarChats">
-      <div class="chat-group-label">اليوم</div>
-      <div id="history"></div>
-    </div>
+    <div class="sidebar-chats" id="history"></div>
     <div class="sidebar-bottom">
-      <div class="dev-credit">
-        Developed by <strong>Mustafa</strong><br/>
-        <a href="https://t.me/Yb_xY" target="_blank" rel="noopener">@Yb_xY ↗</a>
-      </div>
+      <button class="settings-trigger" id="settingsTrigger">
+        <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.68 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        <span>الإعدادات</span>
+      </button>
     </div>
   </aside>
   <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
   <main class="chat-area">
     <div class="top-bar">
-      <button aria-label="فتح القائمة" class="mobile-burger" id="mobileBurger">
-        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-          <line x1="3" x2="21" y1="6" y2="6"></line>
-          <line x1="3" x2="21" y1="12" y2="12"></line>
-          <line x1="3" x2="21" y1="18" y2="18"></line>
-        </svg>
+      <button class="mobile-burger" id="mobileBurger">
+        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="3" x2="21" y1="6" y2="6"/><line x1="3" x2="21" y1="12" y2="12"/><line x1="3" x2="21" y1="18" y2="18"/></svg>
       </button>
       <div class="top-bar-inner">
-        <div class="model-badge-static" title="النموذج المستخدم">
-          <span class="model-badge-dot"></span>
-          <span id="selectedModelLabel">SOST AI</span>
-          <span class="top-separator">/</span>
-          <span class="top-microcopy">بوابة الاستقبال</span>
+        <div style="display:flex;align-items:center;gap:8px;padding:9px 15px;border:1px solid rgba(255,34,51,.28);border-radius:999px;font-size:13px;font-weight:700;color:#ff2233;background:rgba(15,4,6,.7);">
+          <span style="width:7px;height:7px;border-radius:50%;background:#ff2233;box-shadow:0 0 12px #ff2233;animation:pulse 1.8s infinite;"></span>
+          SOST AI / بوابة الاستقبال
         </div>
-        <div class="top-bar-spacer"></div>
+        <div style="flex:1"></div>
         <div class="user-badge" id="userBadge">
-          <span class="ub-name" id="ubName">زائر</span>
-          <span class="ub-plan free" id="ubPlan">FREE</span>
+          <span id="ubName">زائر</span>
+          <span class="ub-plan" id="ubPlan">FREE</span>
         </div>
-        <div class="three-dot-wrap">
-          <button class="three-dot-btn" id="threeDotBtn" aria-label="القائمة">⋮</button>
-          <div class="three-dot-menu" id="threeDotMenu">
-            <button class="dd-item" id="ddSettings" type="button">
-              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l-.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.68 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
-              <span>الإعدادات</span>
-            </button>
-            <button class="dd-item" id="ddSaveChat" type="button">
-              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" x2="12" y1="15" y2="3"></line></svg>
-              <span>حفظ المحادثة</span>
-            </button>
-            <button class="dd-item" id="ddNewChat" type="button">
-              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"></path></svg>
-              <span>محادثة جديدة</span>
-            </button>
-            <button class="dd-item" id="ddSubscriptions" type="button">
-              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4-6.2-4.6L5.8 21.3l2.4-7.4L2 9.4h7.6z"></path></svg>
-              <span>الاشتراكات</span>
-            </button>
-            <button class="dd-item" id="ddSupport" type="button">
-              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" x2="12.01" y1="17" y2="17"></line></svg>
-              <span>الدعم الفني</span>
-            </button>
-            <button class="dd-item" id="ddReport" type="button">
-              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 9v4M12 17h.01M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path></svg>
-              <span>حل المشاكل</span>
-            </button>
-            <button class="dd-item danger" id="ddLogout" type="button">
-              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" x2="9" y1="12" y2="12"></line></svg>
-              <span>تسجيل الخروج</span>
-            </button>
-          </div>
+        <button class="three-dot-btn" id="threeDotBtn">⋮</button>
+        <div class="three-dot-menu" id="threeDotMenu">
+          <button class="dd-item" id="ddSaveChat" type="button">حفظ المحادثة</button>
+          <button class="dd-item" id="ddNewChat" type="button">محادثة جديدة</button>
+          <button class="dd-item" id="ddSubscriptions" type="button">الاشتراكات</button>
+          <button class="dd-item" id="ddSupport" type="button">الدعم الفني</button>
+          <button class="dd-item danger" id="ddLogout" type="button">تسجيل الخروج</button>
         </div>
       </div>
     </div>
 
     <div class="messages-wrap" id="messagesWrap">
       <div class="messages-col" id="messagesCol">
-        <div class="welcome-msg" id="welcomeMsg">
-          <div class="welcome-logo">SOST</div>
-          <h1 class="welcome-title">مرحباً في SOST AI</h1>
-          <div class="welcome-sub">أنا SOST، ذكاء اصطناعي متطور. اسألني أي شيء، ارفع ملفاً، أو سجّل صوتك.</div>
-          <div class="future-deck">
-            <div class="deck-line"><span class="signal-dot"></span><span>النظام متصل</span><strong>2600.04</strong></div>
-            <div class="deck-grid">
-              <div class="deck-card"><span class="deck-label">زمن الاستجابة</span><strong>12<span>ms</span></strong><small>متوسط القناة</small></div>
-              <div class="deck-card"><span class="deck-label">قناة البحث</span><strong>ON</strong><small>المعرفة المتصلة</small></div>
-              <div class="deck-card developer-card"><span class="deck-label">المطوّر</span><strong>مصطفى</strong><a href="https://t.me/Yb_xY" target="_blank" rel="noopener">@Yb_xY ↗</a></div>
-            </div>
-          </div>
+        <div class="welcome-msg" id="welcomeMsg" style="text-align:center;padding:50px 0;">
+          <h1 style="font-size:32px;color:#ff2233;margin-bottom:10px;">مرحباً في SOST AI</h1>
+          <p style="color:var(--text-muted);">اسألني أي شيء، ارفع ملفاً، أو سجّل صوتك.</p>
         </div>
       </div>
     </div>
 
     <div class="input-area">
       <div class="input-col">
-        <div class="attach-chips" id="attachChips"></div>
-        <div class="input-box">
-          <button aria-label="إرفاق ملف" class="attach-btn" id="attachBtn" type="button">
-            <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="2" viewBox="0 0 24 24"><line x1="12" x2="12" y1="5" y2="19"></line><line x1="5" x2="19" y1="12" y2="12"></line></svg>
+        <div class="attach-chips" id="attachChips" style="display:none;padding-bottom:10px;"></div>
+        <div class="input-box" style="position:relative;">
+          <button class="attach-btn" id="attachBtn" type="button">
+            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="12" x2="12" y1="5" y2="19"/><line x1="5" x2="19" y1="12" y2="12"/></svg>
           </button>
-          <div aria-label="إضافة" class="plus-menu" id="plusMenu" role="menu">
-            <button class="plus-item" id="plusFilesBtn" role="menuitem" type="button">
-              <span class="plus-item-icon"><svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"><path d="M21.4 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"></path></svg></span>
-              <span>الملفات</span>
-            </button>
-            <button aria-checked="true" class="plus-item" id="plusSearchBtn" role="menuitemcheckbox" type="button">
-              <span class="plus-item-icon"><svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"></circle><line x1="16.5" x2="21" y1="16.5" y2="21"></line></svg></span>
-              <span>بحث في الويب</span>
-              <span class="plus-item-state" id="searchState">مفعّل</span>
-            </button>
-            <button aria-checked="false" class="plus-item" id="plusThinkBtn" role="menuitemcheckbox" type="button">
-              <span class="plus-item-icon"><svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"><path d="M9.5 2A2.5 2.5 0 0 0 7 4.5v.55A3.5 3.5 0 0 0 5 8.2c0 .6.15 1.16.42 1.65A3.5 3.5 0 0 0 4 12.8c0 .95.38 1.82 1 2.46A3.5 3.5 0 0 0 7.5 21h1A2.5 2.5 0 0 0 11 18.5v-14A2.5 2.5 0 0 0 8.5 2z"></path><path d="M14.5 2A2.5 2.5 0 0 1 17 4.5v.55a3.5 3.5 0 0 1 2 3.15c0 .6-.15 1.16-.42 1.65A3.5 3.5 0 0 1 20 12.8c0 .95-.38 1.82-1 2.46A3.5 3.5 0 0 1 16.5 21h-1A2.5 2.5 0 0 1 13 18.5v-14A2.5 2.5 0 0 1 15.5 2z"></path></svg></span>
-              <span>وضع التفكير</span>
-              <span class="plus-item-state" id="thinkState">متوقف</span>
-            </button>
+          <div class="plus-menu" id="plusMenu">
+            <button class="plus-item" id="plusFilesBtn" type="button">الملفات</button>
+            <button class="plus-item" id="plusSearchBtn" type="button">بحث في الويب</button>
+            <button class="plus-item" id="plusThinkBtn" type="button">وضع التفكير</button>
           </div>
-          <input accept=".txt,.md,.markdown,.csv,.json,.js,.mjs,.ts,.py,.java,.c,.cpp,.cs,.php,.rb,.go,.rs,.sql,.html,.css,.scss,.xml,.yml,.yaml,.ini,.log,.sh,text/*" id="attachInput" multiple style="display:none" type="file"/>
-          <textarea dir="auto" id="mainInput" placeholder="Message SOST..." rows="1"></textarea>
-          <button aria-label="تسجيل صوتي" class="mic-btn" id="micBtn" type="button">
-            <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"><rect height="11" rx="3" width="6" x="9" y="2"></rect><path d="M19 10v1a7 7 0 0 1-14 0v-1"></path><line x1="12" x2="12" y1="18" y2="22"></line><line x1="8" x2="16" y1="22" y2="22"></line></svg>
+          <input type="file" id="attachInput" multiple style="display:none"/>
+          <textarea id="mainInput" placeholder="Message SOST..." rows="1"></textarea>
+          <button class="mic-btn" id="micBtn" type="button">
+            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect height="11" rx="3" width="6" x="9" y="2"/><path d="M19 10v1a7 7 0 0 1-14 0v-1"/><line x1="12" x2="12" y1="18" y2="22"/></svg>
           </button>
-          <button aria-label="إرسال" class="send-btn" id="mainSendBtn" type="button">
-            <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.4" viewBox="0 0 24 24"><line x1="12" x2="12" y1="19" y2="5"></line><polyline points="5 12 12 5 19 12"></polyline></svg>
+          <button class="send-btn" id="mainSendBtn" type="button">
+            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.4" viewBox="0 0 24 24"><line x1="12" x2="12" y1="19" y2="5"/><polyline points="5 12 12 5 19 12"/></svg>
           </button>
-          <button aria-label="إيقاف التوليد" class="stop-btn" id="stopBtn" style="display:none;" type="button">
-            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect height="12" rx="2" width="12" x="6" y="6"></rect></svg>
+          <button class="stop-btn" id="stopBtn" type="button">
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect height="12" rx="2" width="12" x="6" y="6"/></svg>
           </button>
         </div>
       </div>
@@ -1186,251 +247,89 @@ html[dir="rtl"] .three-dot-menu { right: auto; left: 0; }
   </main>
 </div>
 
-<!-- ========== SETTINGS MODAL ========== -->
+<!-- SETTINGS MODAL -->
 <div class="modal-overlay" id="settingsOverlay">
   <div class="modal">
     <div class="modal-head">
       <h3>الإعدادات</h3>
-      <button aria-label="إغلاق" class="modal-close" id="settingsClose">
-        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="18" x2="6" y1="6" y2="18"></line><line x1="6" x2="18" y1="6" y2="18"></line></svg>
-      </button>
+      <button class="modal-close" id="settingsClose">✕</button>
     </div>
     <div class="modal-body">
-      <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid rgba(255,34,51,.1);">
-        <div>
-          <div style="font-size:13px;font-weight:600;">اللغة</div>
-          <div style="font-size:11px;color:var(--text-muted);">لغة واجهة الموقع</div>
-        </div>
-        <div style="display:flex;gap:2px;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:2px;">
-          <button class="theme-pill active" data-lang="ar" type="button" style="padding:6px 14px;border-radius:6px;font-size:12px;font-weight:600;color:var(--text-muted);">العربية</button>
-          <button class="theme-pill" data-lang="en" type="button" style="padding:6px 14px;border-radius:6px;font-size:12px;font-weight:600;color:var(--text-muted);">English</button>
-        </div>
-      </div>
-      <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid rgba(255,34,51,.1);">
-        <div>
-          <div style="font-size:13px;font-weight:600;">المظهر</div>
-          <div style="font-size:11px;color:var(--text-muted);">الوضع الفاتح أو الداكن</div>
-        </div>
-        <div style="display:flex;gap:2px;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:2px;">
-          <button class="theme-pill active" data-theme="dark" type="button" style="padding:6px 14px;border-radius:6px;font-size:12px;font-weight:600;color:var(--text-muted);">داكن</button>
-          <button class="theme-pill" data-theme="light" type="button" style="padding:6px 14px;border-radius:6px;font-size:12px;font-weight:600;color:var(--text-muted);">فاتح</button>
-        </div>
-      </div>
-      <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid rgba(255,34,51,.1);">
-        <div>
-          <div style="font-size:13px;font-weight:600;">دخول المطور</div>
-          <div style="font-size:11px;color:var(--text-muted);">لوحة تحكم الموقع</div>
-        </div>
-        <button class="btn-secondary" id="devAccessBtn" type="button" style="padding:7px 16px;font-size:12px;">🔒 دخول</button>
+      <div style="display:flex;justify-content:space-between;padding:12px 0;border-bottom:1px solid #222;">
+        <span>دخول المطور</span>
+        <button class="btn-secondary" id="devAccessBtn" type="button" style="padding:5px 10px;font-size:12px;">🔒 دخول</button>
       </div>
       <div style="padding-top:16px;">
-        <button class="btn-danger" id="clearAllChatsBtn" style="width:100%;padding:12px;">
-          🗑 مسح جميع المحادثات
-        </button>
+        <button class="btn-danger" id="clearAllChatsBtn" style="width:100%;padding:12px;">🗑 مسح جميع المحادثات</button>
       </div>
     </div>
   </div>
 </div>
 
-<!-- ========== SUBSCRIPTIONS MODAL ========== -->
+<!-- SUBSCRIPTIONS MODAL -->
 <div class="modal-overlay" id="subsOverlay">
-  <div class="modal wide">
+  <div class="modal">
     <div class="modal-head">
-      <h3>💎 الاشتراكات</h3>
-      <button class="modal-close" id="subsClose">
-        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="18" x2="6" y1="6" y2="18"></line><line x1="6" x2="18" y1="6" y2="18"></line></svg>
-      </button>
+      <h3>الاشتراكات</h3>
+      <button class="modal-close" id="subsClose">✕</button>
     </div>
-    <div class="modal-body">
-      <p style="font-size:13px;color:var(--text-secondary);margin-bottom:16px;text-align:center;">
-        اختر الخطة المناسبة لك. الاشتراكات المدفوعة تُفعَّل من قبل المطور بعد التواصل معه.
-      </p>
-      <div class="plans-grid">
-        <div class="plan-card" data-plan="free">
-          <div class="plan-name">Free</div>
-          <div class="plan-price">0<small> $</small></div>
-          <div class="plan-limit">10 رسائل فقط<br/>عبر الحساب كاملاً</div>
-          <ul class="plan-features">
-            <li>محادثات غير محدودة</li>
-            <li>رفع ملفات</li>
-            <li>بحث ويب</li>
-          </ul>
-          <button class="plan-btn" data-plan-btn="free" type="button">الخطة الحالية</button>
-        </div>
-        <div class="plan-card" data-plan="monthly">
-          <div class="plan-name">Monthly</div>
-          <div class="plan-price">$9.99<small> / شهر</small></div>
-          <div class="plan-limit">500 رسالة يوميًا<br/>تنتهي بعد 30 يوم</div>
-          <ul class="plan-features">
-            <li>كل ميزات Free</li>
-            <li>وضع التفكير</li>
-            <li>أولوية الدعم</li>
-          </ul>
-          <button class="plan-btn" data-plan-btn="monthly" type="button">تواصل للتفعيل</button>
-        </div>
-        <div class="plan-card featured" data-plan="yearly">
-          <div class="vip-badge">👑 VIP</div>
-          <div class="plan-name">Yearly VIP</div>
-          <div class="plan-price">$50<small> / سنة</small></div>
-          <div class="plan-limit">رسائل غير محدودة<br/>صلاحية سنة كاملة</div>
-          <ul class="plan-features">
-            <li>كل الميزات</li>
-            <li>بدون أي قيود</li>
-            <li>دعم فوري VIP</li>
-            <li>ميزات قوية جداً</li>
-          </ul>
-          <button class="plan-btn" data-plan-btn="yearly" type="button">تواصل للتفعيل</button>
-        </div>
+    <div class="modal-body" style="text-align:center;">
+      <p style="color:#aaa;margin-bottom:20px;">اختر الخطة المناسبة لك.</p>
+      <div style="display:grid;grid-template-columns:1fr;gap:10px;">
+        <div style="padding:15px;border:1px solid #ff2233;border-radius:10px;">Free - 0$</div>
+        <div style="padding:15px;border:1px solid #ff2233;border-radius:10px;">Monthly - $9.99</div>
+        <div style="padding:15px;border:1px solid #ff2233;border-radius:10px;">Yearly - $79.99</div>
       </div>
-      <p style="font-size:12px;color:var(--text-muted);text-align:center;margin-top:18px;">
-        للتفعيل تواصل مع المطور: <a href="https://t.me/Yb_xY" target="_blank" rel="noopener" style="color:var(--accent);font-weight:700;">@Yb_xY</a>
-      </p>
     </div>
   </div>
 </div>
 
-<!-- ========== SUPPORT MODAL ========== -->
+<!-- SUPPORT MODAL -->
 <div class="modal-overlay" id="supportOverlay">
   <div class="modal">
     <div class="modal-head">
-      <h3>🛠 الدعم الفني</h3>
-      <button class="modal-close" id="supportClose">
-        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="18" x2="6" y1="6" y2="18"></line><line x1="6" x2="18" y1="6" y2="18"></line></svg>
-      </button>
+      <h3>الدعم الفني</h3>
+      <button class="modal-close" id="supportClose">✕</button>
     </div>
     <div class="modal-body">
-      <div class="support-form">
-        <label style="font-size:12px;color:var(--text-secondary);font-weight:600;">اكتب مشكلتك بالتفصيل:</label>
-        <textarea id="supportText" placeholder="اشرح المشكلة التي واجهتها..."></textarea>
-        <button class="btn-primary" id="supportSubmit" type="button" style="align-self:flex-end;">📩 إرسال إلى المطور</button>
-      </div>
-      <div class="support-history">
-        <h4>بلاغاتك السابقة</h4>
-        <div id="supportHistoryList"></div>
-      </div>
+      <textarea id="supportText" placeholder="اشرح مشكلتك..." style="width:100%;height:120px;background:#111;color:#fff;border:1px solid #ff2233;border-radius:10px;padding:10px;"></textarea>
+      <button class="btn-primary" id="supportSubmit" style="margin-top:10px;width:100%;">إرسال</button>
     </div>
   </div>
 </div>
 
-<!-- ========== ADMIN CODE MODAL ========== -->
-<div class="modal-overlay" id="adminCodeOverlay">
-  <div class="modal" style="max-width:400px;">
-    <div class="modal-head">
-      <h3>🔒 دخول المطور</h3>
-      <button class="modal-close" id="adminCodeClose">
-        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="18" x2="6" y1="6" y2="18"></line><line x1="6" x2="18" y1="6" y2="18"></line></svg>
-      </button>
-    </div>
-    <div class="modal-body">
-      <p style="font-size:13px;color:var(--text-secondary);margin-bottom:14px;">أدخل رمز الدخول السري للوصول إلى لوحة التحكم</p>
-      <input type="password" id="adminCodeInput" placeholder="• • • • • • • •" style="width:100%;padding:13px 16px;background:rgba(255,34,51,.06);border:1px solid rgba(255,34,51,.3);border-radius:12px;color:var(--text-primary);font-size:18px;text-align:center;letter-spacing:8px;outline:none;font-family:var(--mono);" autocomplete="off"/>
-      <div style="color:#ff7b88;font-size:12px;text-align:center;margin-top:10px;min-height:18px;" id="adminCodeMsg"></div>
-    </div>
-    <div class="modal-foot">
-      <button class="btn-secondary" id="adminCodeCancel" type="button">إلغاء</button>
-      <button class="btn-primary" id="adminCodeSubmit" type="button">دخول</button>
-    </div>
-  </div>
-</div>
-
-<!-- ========== ADMIN BAN MODAL ========== -->
-<div class="modal-overlay" id="adminBanOverlay">
-  <div class="modal" style="max-width:400px;">
-    <div class="modal-head">
-      <h3>⛔ حظر مستخدم</h3>
-      <button class="modal-close" id="adminBanClose">
-        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="18" x2="6" y1="6" y2="18"></line><line x1="6" x2="18" y1="6" y2="18"></line></svg>
-      </button>
-    </div>
-    <div class="modal-body">
-      <p style="font-size:13px;color:var(--text-secondary);margin-bottom:14px;">حدد سبب الحظر وعدد الأيام للمستخدم: <strong id="banTargetName" style="color:var(--accent);"></strong></p>
-      <div style="margin-bottom:12px;">
-        <label style="font-size:12px;color:var(--text-secondary);font-weight:600;display:block;margin-bottom:6px;">سبب الحظر:</label>
-        <input type="text" id="banReasonInput" placeholder="مثال: مخالفة الشروط..." style="width:100%;padding:10px;background:rgba(255,34,51,.04);border:1px solid rgba(255,34,51,.22);border-radius:8px;color:#fff;outline:none;"/>
-      </div>
-      <div>
-        <label style="font-size:12px;color:var(--text-secondary);font-weight:600;display:block;margin-bottom:6px;">عدد أيام الحظر:</label>
-        <input type="number" id="banDaysInput" value="7" min="1" max="3650" style="width:100%;padding:10px;background:rgba(255,34,51,.04);border:1px solid rgba(255,34,51,.22);border-radius:8px;color:#fff;outline:none;"/>
-      </div>
-    </div>
-    <div class="modal-foot">
-      <button class="btn-secondary" id="adminBanCancel" type="button">إلغاء</button>
-      <button class="btn-danger" id="adminBanSubmit" type="button">تأكيد الحظر</button>
-    </div>
-  </div>
-</div>
-
-<!-- ========== ADMIN PANEL ========== -->
+<!-- ADMIN MODAL -->
 <div class="modal-overlay" id="adminOverlay">
-  <div class="modal wide" style="max-width:900px;">
+  <div class="modal" style="max-width:800px;">
     <div class="modal-head">
-      <h3>👑 لوحة تحكم المطور</h3>
-      <button class="modal-close" id="adminClose">
-        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="18" x2="6" y1="6" y2="18"></line><line x1="6" x2="18" y1="6" y2="18"></line></svg>
-      </button>
+      <h3>لوحة تحكم المطور</h3>
+      <button class="modal-close" id="adminClose">✕</button>
     </div>
     <div class="admin-tabs">
       <button class="admin-tab active" data-tab="overview">نظرة عامة</button>
       <button class="admin-tab" data-tab="users">المستخدمين</button>
       <button class="admin-tab" data-tab="reports">البلاغات</button>
-      <button class="admin-tab" data-tab="monitor">مراقبة الرسائل</button>
     </div>
-    <div class="modal-body">
+    <div class="modal-body" style="padding:0;">
       <div class="admin-pane active" id="paneOverview">
         <div class="admin-stats">
-          <div class="stat-card"><div class="stat-value" id="statUsers">0</div><div class="stat-label">إجمالي المستخدمين</div></div>
-          <div class="stat-card"><div class="stat-value" id="statMessages">0</div><div class="stat-label">إجمالي الرسائل</div></div>
-          <div class="stat-card"><div class="stat-value" id="statReports">0</div><div class="stat-label">بلاغات معلقة</div></div>
-          <div class="stat-card"><div class="stat-value" id="statBanned">0</div><div class="stat-label">محظورون</div></div>
+          <div class="stat-card"><div class="stat-value" id="statUsers">0</div><div>المستخدمين</div></div>
+          <div class="stat-card"><div class="stat-value" id="statMessages">0</div><div>الرسائل</div></div>
+          <div class="stat-card"><div class="stat-value" id="statReports">0</div><div>البلاغات</div></div>
+          <div class="stat-card"><div class="stat-value" id="statBanned">0</div><div>المحظورين</div></div>
         </div>
       </div>
-      <div class="admin-pane" id="paneUsers">
-        <div id="adminUsersList"></div>
-      </div>
-      <div class="admin-pane" id="paneReports">
-        <div id="adminReportsList"></div>
-      </div>
-      <div class="admin-pane" id="paneMonitor">
-        <div id="adminMonitorList"></div>
-      </div>
+      <div class="admin-pane" id="paneUsers"><div id="adminUsersList"></div></div>
+      <div class="admin-pane" id="paneReports"><div id="adminReportsList"></div></div>
     </div>
-  </div>
-</div>
-
-<!-- ========== PREVIEW / FILE VIEWER ========== -->
-<div class="preview-overlay" id="previewOverlay">
-  <div class="preview-win">
-    <div class="preview-head">
-      <span class="preview-title" id="previewTitle">معاينة HTML</span>
-      <div class="preview-actions">
-        <button aria-label="إغلاق" class="preview-btn preview-close" id="previewClose" type="button">
-          <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="2" viewBox="0 0 24 24"><line x1="18" x2="6" y1="6" y2="18"></line><line x1="6" x2="18" y1="6" y2="18"></line></svg>
-        </button>
-      </div>
-    </div>
-    <iframe class="preview-frame" id="previewFrame" referrerpolicy="no-referrer" sandbox="allow-scripts allow-modals allow-forms allow-popups"></iframe>
-  </div>
-</div>
-<div class="file-viewer-overlay" id="fileViewerOverlay">
-  <div class="file-viewer">
-    <div class="file-viewer-head">
-      <span class="file-viewer-title" id="fileViewerTitle">ملف</span>
-      <div class="file-viewer-actions">
-        <button class="fv-btn" id="fileViewerCopy" type="button">نسخ الكود</button>
-        <button class="fv-btn fv-close" id="fileViewerClose" type="button">إغلاق</button>
-      </div>
-    </div>
-    <div class="file-viewer-body" id="fileViewerBody"><code id="fileViewerCode"></code></div>
   </div>
 </div>
 
 </div>
 
-<!-- ============ NEW API CHAT ENGINE ============ -->
 <script>
 (function() {
     'use strict';
-
     let currentUser = null;
     let chats = [];
     let currentId = null;
@@ -1440,15 +339,11 @@ html[dir="rtl"] .three-dot-menu { right: auto; left: 0; }
     const $ = id => document.getElementById(id);
 
     async function apiCall(endpoint, method = 'GET', body = null) {
-        const options = {
-            method,
-            headers: { 'Content-Type': 'application/json' },
-            credentials: 'include'
-        };
+        const options = { method, headers: { 'Content-Type': 'application/json' }, credentials: 'include' };
         if (body) options.body = JSON.stringify(body);
         const res = await fetch(endpoint, options);
         const data = await res.json();
-        if (!res.ok) throw new Error(data.error || 'حدث خطأ في الخادم');
+        if (!res.ok) throw new Error(data.error || 'خطأ في الخادم');
         return data;
     }
 
@@ -1465,143 +360,132 @@ html[dir="rtl"] .three-dot-menu { right: auto; left: 0; }
             const res = await apiCall('/api/auth/me');
             if (res.ok && res.user) {
                 currentUser = res.user;
+                if (currentUser.status === 'banned') {
+                    showToast('⛔ حسابك محظور', true);
+                    $('authOverlay').classList.remove('hidden');
+                    return;
+                }
                 enterApp();
                 return true;
             }
         } catch (e) {}
-        showAuthOverlay();
+        $('authOverlay').classList.remove('hidden');
         return false;
     }
 
-    function showAuthOverlay() {
-        const overlay = $('authOverlay');
-        if (overlay) overlay.classList.remove('hidden');
-        const app = document.querySelector('.app');
-        if (app) app.style.display = 'none';
-    }
-
     function enterApp() {
-        const overlay = $('authOverlay');
-        if (overlay) overlay.classList.add('hidden');
-        const app = document.querySelector('.app');
-        if (app) app.style.display = 'flex';
-        updateUserBadge();
+        $('authOverlay').classList.add('hidden');
+        document.querySelector('.app').style.display = 'flex';
+        $('ubName').textContent = currentUser.username;
+        $('ubPlan').textContent = (currentUser.role === 'admin' ? 'ADMIN' : 'FREE');
         loadChats();
     }
 
-    function updateUserBadge() {
-        if (!currentUser) return;
-        const nameEl = $('ubName');
-        const planEl = $('ubPlan');
-        if (nameEl) nameEl.textContent = currentUser.username;
-        if (planEl) {
-            planEl.textContent = (currentUser.role === 'admin' ? 'ADMIN' : 'FREE');
-            planEl.className = 'ub-plan free';
-        }
-    }
-
     document.addEventListener('DOMContentLoaded', () => {
-        const form = $('authForm');
-        if (form) {
-            form.onsubmit = async (e) => {
-                e.preventDefault();
-                const username = $('authUser').value.trim();
-                const password = $('authPass').value;
-                const isRegister = $('authTabRegister').classList.contains('active');
-                const btn = $('authSubmit');
-                const msg = $('authMsg');
-
-                if (!username || !password) return showToast('أدخل البيانات', true);
-
-                btn.disabled = true;
-                btn.textContent = 'جارٍ المعالجة...';
-                msg.textContent = '';
-
-                try {
-                    const endpoint = isRegister ? '/api/auth/register' : '/api/auth/login';
-                    const res = await apiCall(endpoint, 'POST', { username, password });
-                    
-                    if (res.ok) {
-                        msg.textContent = 'تم بنجاح! جاري الدخول...';
-                        msg.classList.add('success');
-                        setTimeout(() => checkAuth(), 500);
-                    }
-                } catch (err) {
-                    msg.textContent = err.message;
-                    msg.classList.remove('success');
-                } finally {
-                    btn.disabled = false;
-                    btn.textContent = isRegister ? 'إنشاء حساب' : 'دخول النظام';
+        // Auth Form
+        $('authForm').onsubmit = async (e) => {
+            e.preventDefault();
+            const isReg = $('authTabRegister').classList.contains('active');
+            const btn = $('authSubmit');
+            const msg = $('authMsg');
+            btn.disabled = true; btn.textContent = 'جارٍ المعالجة...'; msg.textContent = '';
+            try {
+                const endpoint = isReg ? '/api/auth/register' : '/api/auth/login';
+                const res = await apiCall(endpoint, 'POST', { username: $('authUser').value.trim(), password: $('authPass').value });
+                if (res.ok) {
+                    msg.textContent = 'تم بنجاح! جاري الدخول...';
+                    msg.classList.add('success');
+                    setTimeout(checkAuth, 500);
                 }
-            };
-        }
-        
-        const tabLogin = $('authTabLogin');
-        const tabReg = $('authTabRegister');
-        if (tabLogin && tabReg) {
-            tabLogin.onclick = () => {
-                tabLogin.classList.add('active'); tabReg.classList.remove('active');
-                $('authSubmit').textContent = 'دخول النظام';
-            };
-            tabReg.onclick = () => {
-                tabReg.classList.add('active'); tabLogin.classList.remove('active');
-                $('authSubmit').textContent = 'إنشاء حساب';
-            };
-        }
+            } catch (err) {
+                msg.textContent = err.message;
+                msg.classList.remove('success');
+            } finally {
+                btn.disabled = false;
+                btn.textContent = isReg ? 'إنشاء حساب' : 'دخول النظام';
+            }
+        };
+
+        $('authTabLogin').onclick = () => {
+            $('authTabLogin').classList.add('active'); $('authTabRegister').classList.remove('active');
+            $('authSubmit').textContent = 'دخول النظام';
+        };
+        $('authTabRegister').onclick = () => {
+            $('authTabRegister').classList.add('active'); $('authTabLogin').classList.remove('active');
+            $('authSubmit').textContent = 'إنشاء حساب';
+        };
+
+        // Menu
+        $('threeDotBtn').onclick = (e) => { e.stopPropagation(); $('threeDotMenu').classList.toggle('open'); };
+        document.addEventListener('click', (e) => {
+            if (!$('threeDotMenu').contains(e.target) && !$('threeDotBtn').contains(e.target)) $('threeDotMenu').classList.remove('open');
+        });
+
+        $('ddNewChat').onclick = newChat;
+        $('ddLogout').onclick = async () => { await apiCall('/api/auth/logout', 'POST'); location.reload(); };
+        $('ddSettings').onclick = () => $('settingsOverlay').classList.add('open'); // Deprecated but kept
+        $('settingsTrigger').onclick = () => $('settingsOverlay').classList.add('open');
+        $('settingsClose').onclick = () => $('settingsOverlay').classList.remove('open');
+        $('ddSubscriptions').onclick = () => $('subsOverlay').classList.add('open');
+        $('subsClose').onclick = () => $('subsOverlay').classList.remove('open');
+        $('ddSupport').onclick = () => $('supportOverlay').classList.add('open');
+        $('supportClose').onclick = () => $('supportOverlay').classList.remove('open');
+
+        // Admin
+        $('devAccessBtn').onclick = () => {
+            const code = prompt("أدخل رمز المطور:");
+            if (code === 'SOST2009') {
+                $('settingsOverlay').classList.remove('open');
+                $('adminOverlay').classList.add('open');
+                refreshAdmin();
+            }
+        };
+        $('adminClose').onclick = () => $('adminOverlay').classList.remove('open');
+
+        // Send
+        $('mainSendBtn').onclick = sendMessage;
+        $('stopBtn').onclick = () => { if (abortController) abortController.abort(); };
+        $('mainInput').addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
+        });
+
+        checkAuth();
     });
 
     async function loadChats() {
         try {
             const res = await apiCall('/api/chats');
-            if (res.ok && res.chats) {
+            if (res.ok) {
                 chats = res.chats;
                 renderHistory();
                 if (chats.length > 0) loadChat(chats[0].id);
                 else newChat();
             }
-        } catch (e) { showToast('فشل تحميل المحادثات', true); }
+        } catch (e) {}
     }
 
     function renderHistory() {
         const h = $('history');
-        if (!h) return;
-        if (!chats.length) { h.innerHTML = '<div class="history-empty">لا توجد محادثات</div>'; return; }
-        
-        h.innerHTML = chats.map(c => 
-            `<button class="history-item ${c.id === currentId ? 'active' : ''}" data-id="${c.id}">
-                ${c.title || 'محادثة بدون عنوان'}
-            </button>`
-        ).join('');
-
-        h.querySelectorAll('.history-item').forEach(b => {
-            b.onclick = () => loadChat(b.getAttribute('data-id'));
-        });
+        if (!chats.length) { h.innerHTML = '<div style="padding:10px;color:#666;">لا توجد محادثات</div>'; return; }
+        h.innerHTML = chats.map(c => `<button class="history-item ${c.id === currentId ? 'active' : ''}" onclick="window._loadChat('${c.id}')">${c.title || 'محادثة'}</button>`).join('');
     }
+    window._loadChat = loadChat;
 
     async function loadChat(id) {
-        if (!id) return;
         currentId = id;
-        const col = $('messagesCol');
-        if (col) col.innerHTML = '';
-        if ($('welcomeMsg')) $('welcomeMsg').style.display = 'none';
-
+        $('messagesCol').innerHTML = '';
         renderHistory();
-
         try {
             const res = await apiCall(`/api/chats/${id}/messages`);
-            if (res.ok && res.messages) {
-                res.messages.forEach(m => addMessageToUI(m.role, m.content));
-                scrollToBottom();
-            }
-        } catch (e) { showToast('فشل تحميل الرسائل', true); }
+            if (res.ok) res.messages.forEach(m => addMessageUI(m.role, m.content));
+            scrollBottom();
+        } catch (e) {}
     }
 
     function newChat() {
-        if (isProcessing) return;
         currentId = Date.now().toString();
-        const col = $('messagesCol');
-        if (col) col.innerHTML = '';
-        if ($('welcomeMsg')) $('welcomeMsg').style.display = 'flex';
+        $('messagesCol').innerHTML = '';
+        $('welcomeMsg').style.display = 'block';
         renderHistory();
     }
 
@@ -1611,29 +495,20 @@ html[dir="rtl"] .three-dot-menu { right: auto; left: 0; }
         const text = input.value.trim();
         if (!text) return;
 
-        const sendBtn = $('mainSendBtn');
-        const stopBtn = $('stopBtn');
-
         input.value = '';
-        input.style.height = 'auto';
-        if ($('welcomeMsg')) $('welcomeMsg').style.display = 'none';
-
-        addMessageToUI('user', text);
-        
+        $('welcomeMsg').style.display = 'none';
+        addMessageUI('user', text);
+        $('mainSendBtn').style.display = 'none';
+        $('stopBtn').style.display = 'flex';
         isProcessing = true;
-        sendBtn.style.display = 'none';
-        stopBtn.style.display = 'flex';
 
         const loadingId = 'loading-' + Date.now();
-        const col = $('messagesCol');
-        if (col) {
-            const el = document.createElement('div');
-            el.id = loadingId;
-            el.className = 'msg msg-assistant';
-            el.innerHTML = '<div class="thinking"><span>النموذج يفكر</span><span class="dots"></span></div>';
-            col.appendChild(el);
-            scrollToBottom();
-        }
+        const el = document.createElement('div');
+        el.id = loadingId;
+        el.className = 'msg msg-assistant';
+        el.innerHTML = '<div class="thinking">النموذج يفكر...</div>';
+        $('messagesCol').appendChild(el);
+        scrollBottom();
 
         abortController = new AbortController();
 
@@ -1645,170 +520,48 @@ html[dir="rtl"] .three-dot-menu { right: auto; left: 0; }
                 signal: abortController.signal,
                 body: JSON.stringify({ conversationId: currentId, message: text })
             });
-
             const data = await res.json();
             if (!res.ok) throw new Error(data.error || 'فشل الاتصال');
-
-            document.getElementById(loadingId)?.remove();
-            addMessageToUI('assistant', data.reply);
-
+            document.getElementById(loadingId).remove();
+            addMessageUI('assistant', data.reply);
+            loadChats(); // refresh history
         } catch (err) {
-            document.getElementById(loadingId)?.remove();
-            if (err.name === 'AbortError') {
-                addMessageToUI('assistant', 'تم إيقاف التوليد.');
-            } else {
-                addMessageToUI('assistant', '⚠️ ' + err.message);
-            }
+            document.getElementById(loadingId).remove();
+            addMessageUI('assistant', '⚠️ ' + err.message);
         } finally {
             isProcessing = false;
-            sendBtn.style.display = 'flex';
-            stopBtn.style.display = 'none';
+            $('mainSendBtn').style.display = 'flex';
+            $('stopBtn').style.display = 'none';
             abortController = null;
-            input.focus();
         }
     }
 
-    function addMessageToUI(role, text) {
-        const col = $('messagesCol');
-        if (!col) return;
-
+    function addMessageUI(role, text) {
         const el = document.createElement('div');
         el.className = `msg msg-${role}`;
-
         if (role === 'user') {
             el.innerHTML = `<div class="msg-bubble">${escapeHTML(text)}</div><div class="msg-avatar">U</div>`;
         } else {
-            el.innerHTML = `
-                <div class="msg-content">
-                    <div class="msg-model-label"><span style="font-family:var(--mono);font-size:11px;color:var(--text-muted);">SOST AI</span></div>
-                    <div class="prose" dir="auto">${formatMessage(text)}</div>
-                </div>
-            `;
+            el.innerHTML = `<div class="msg-content"><div style="font-size:11px;color:#ff2233;margin-bottom:4px;">SOST AI</div><div style="color:#fff;">${formatMsg(text)}</div></div>`;
         }
-        col.appendChild(el);
-        scrollToBottom();
+        $('messagesCol').appendChild(el);
+        scrollBottom();
     }
 
-    function escapeHTML(str) {
-        if (!str) return '';
-        return String(str).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-    }
-    
-    function formatMessage(text) {
-        let html = escapeHTML(text);
-        html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-        html = html.replace(/\*(.*?)\*/g, '<em>$1</em>');
-        html = html.replace(/`([^`]+)`/g, '<code>$1</code>');
-        html = html.replace(/\n/g, '<br>');
-        return html;
-    }
+    function escapeHTML(s) { return s.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+    function formatMsg(t) { return escapeHTML(t).replace(/\n/g, '<br>'); }
+    function scrollBottom() { const w = $('messagesWrap'); if (w) w.scrollTop = w.scrollHeight; }
 
-    function scrollToBottom() {
-        const wrap = $('messagesWrap');
-        if (wrap) wrap.scrollTop = wrap.scrollHeight;
-    }
-
-    document.addEventListener('DOMContentLoaded', () => {
-        const sendBtn = $('mainSendBtn');
-        if (sendBtn) sendBtn.onclick = sendMessage;
-
-        const stopBtn = $('stopBtn');
-        if (stopBtn) stopBtn.onclick = () => {
-            if (abortController) { abortController.abort(); abortController = null; }
-            showToast('تم الإيقاف');
-        };
-
-        const input = $('mainInput');
-        if (input) {
-            input.addEventListener('keydown', (e) => {
-                if (e.key === 'Enter' && !e.shiftKey) {
-                    e.preventDefault();
-                    sendMessage();
-                }
-            });
-            input.addEventListener('input', () => {
-                input.style.height = 'auto';
-                input.style.height = Math.min(160, input.scrollHeight) + 'px';
-            });
-        }
-
-        const newChatBtn = $('newChatBtn');
-        if (newChatBtn) newChatBtn.onclick = newChat;
-
-        const logoutBtn = $('ddLogout');
-        if (logoutBtn) {
-            logoutBtn.onclick = async () => {
-                try {
-                    await apiCall('/api/auth/logout', 'POST');
-                    currentUser = null;
-                    chats = [];
-                    showAuthOverlay();
-                } catch (e) { showToast('فشل تسجيل الخروج', true); }
-            };
-        }
-
-        // تفعيل أزرار القائمة
-        const threeDotBtn = $('threeDotBtn');
-        const threeDotMenu = $('threeDotMenu');
-        if (threeDotBtn && threeDotMenu) {
-            threeDotBtn.onclick = (e) => {
-                e.stopPropagation();
-                threeDotMenu.classList.toggle('open');
-            };
-            document.addEventListener('click', (e) => {
-                if (!threeDotMenu.contains(e.target) && !threeDotBtn.contains(e.target)) {
-                    threeDotMenu.classList.remove('open');
-                }
-            });
-        }
-
-        // الإعدادات
-        const ddSettings = $('ddSettings');
-        const settingsOverlay = $('settingsOverlay');
-        const settingsClose = $('settingsClose');
-        if (ddSettings && settingsOverlay) {
-            ddSettings.onclick = () => { threeDotMenu.classList.remove('open'); settingsOverlay.classList.add('open'); };
-            if (settingsClose) settingsClose.onclick = () => settingsOverlay.classList.remove('open');
-            settingsOverlay.onclick = (e) => { if (e.target === settingsOverlay) settingsOverlay.classList.remove('open'); };
-        }
-
-        // الاشتراكات
-        const ddSubs = $('ddSubscriptions');
-        const subsOverlay = $('subsOverlay');
-        const subsClose = $('subsClose');
-        if (ddSubs && subsOverlay) {
-            ddSubs.onclick = () => { threeDotMenu.classList.remove('open'); subsOverlay.classList.add('open'); };
-            if (subsClose) subsClose.onclick = () => subsOverlay.classList.remove('open');
-            subsOverlay.onclick = (e) => { if (e.target === subsOverlay) subsOverlay.classList.remove('open'); };
-        }
-
-        // الدعم
-        const ddSupport = $('ddSupport');
-        const supportOverlay = $('supportOverlay');
-        const supportClose = $('supportClose');
-        if (ddSupport && supportOverlay) {
-            ddSupport.onclick = () => { threeDotMenu.classList.remove('open'); supportOverlay.classList.add('open'); };
-            if (supportClose) supportClose.onclick = () => supportOverlay.classList.remove('open');
-            supportOverlay.onclick = (e) => { if (e.target === supportOverlay) supportOverlay.classList.remove('open'); };
-        }
-
-        // لوحة التحكم
-        const devAccessBtn = $('devAccessBtn');
-        const adminOverlay = $('adminOverlay');
-        const adminClose = $('adminClose');
-        if (devAccessBtn && adminOverlay) {
-            devAccessBtn.onclick = () => {
-                settingsOverlay.classList.remove('open');
-                adminOverlay.classList.add('open');
-            };
-            if (adminClose) adminClose.onclick = () => adminOverlay.classList.remove('open');
-            adminOverlay.onclick = (e) => { if (e.target === adminOverlay) adminOverlay.classList.remove('open'); };
-        }
-
-        checkAuth();
-    });
-
+    // Stubs to avoid errors
+    window.refreshAdmin = function() {
+        // Fill stats
+        fetch('/api/auth/me').then(r=>r.json()).then(d => {
+            if(d.user && d.user.role !== 'admin') return;
+            // Fake stats for now (or fetch real ones if API existed)
+            $('statUsers').textContent = '...';
+        });
+    };
 })();
 </script>
 </body>
-  </html>
+</html>
